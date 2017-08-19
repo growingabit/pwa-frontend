@@ -2,12 +2,13 @@
     "suites": ["test/signup-step0.html"],
     "verbose": true,
     "plugins": {
+        "local": {
+            "browsers": ["chrome", "firefox"]
+        },
         "istanbul": {
             "dir": "./coverage",
             "reporters": ["text-summary", "lcov"],
-            "include": [
-                "/src/signup-step0.html"
-            ],
+            "include": [],
             "exclude": []
         }
     }
