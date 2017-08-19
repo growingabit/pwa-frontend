@@ -1,0 +1,14 @@
+{
+    "suites": ["test/my-view1.html"],
+    "verbose": true,
+    "plugins": {
+        "istanbul": {
+            "dir": "./coverage",
+            "reporters": ["text-summary", "lcov"],
+            "include": [
+                "/src/my-view1.html"
+            ],
+            "exclude": []
+        }
+    }
+}

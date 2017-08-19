@@ -1,7 +1,10 @@
 language: node_js
+branches:
+  only:
+    - master
 sudo: false
 before_script:
-    - npm install -g bower polymer-cli
+    - npm install -g bower polymer-cli wct
     - bower install
 node_js: stable
 addons:
@@ -12,5 +15,6 @@ addons:
         packages:
             - google-chrome-stable
 script:
-    - xvfb-run polymer test
     - polymer build
+    - xvfb-run wct
+    - bash <(curl -s https://codecov.io/bash)
