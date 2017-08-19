@@ -1,7 +1,7 @@
 language: node_js
 branches:
-  only:
-    - master
+    only:
+        - master
 sudo: false
 before_script:
     - npm install -g bower polymer-cli wct
