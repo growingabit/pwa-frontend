@@ -4,7 +4,7 @@ branches:
         - master
 sudo: false
 before_script:
-    - npm install -g bower polymer-cli wct
+    - npm install -g bower polymer-cli web-component-tester
     - bower install
 node_js: stable
 addons:

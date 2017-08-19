@@ -1,12 +1,12 @@
 {
-    "suites": ["test/my-view1.html"],
+    "suites": ["test/signup-step0.html"],
     "verbose": true,
     "plugins": {
         "istanbul": {
             "dir": "./coverage",
             "reporters": ["text-summary", "lcov"],
             "include": [
-                "/src/my-view1.html"
+                "/src/signup-step0.html"
             ],
             "exclude": []
         }
