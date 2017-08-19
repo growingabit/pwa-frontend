@@ -1,8 +1,8 @@
 # Polymer App Toolbox - Starter Kit
 
 [![Build Status](https://travis-ci.org/growingabit/pwa-frontend.svg?branch=master)](https://travis-ci.org/growingabit/pwa-frontend)
-[![Code Climate](https://codeclimate.com/github/growingabit/pwa-backend/badges/gpa.svg)](https://codeclimate.com/github/growingabit/pwa-backend)
-[![Issue Count](https://codeclimate.com/github/growingabit/pwa-backend/badges/issue_count.svg)](https://codeclimate.com/github/growingabit/pwa-backend)
+[![Code Climate](https://codeclimate.com/github/growingabit/pwa-frontend/badges/gpa.svg)](https://codeclimate.com/github/growingabit/pwa-frontend)
+[![Issue Count](https://codeclimate.com/github/growingabit/pwa-frontend/badges/issue_count.svg)](https://codeclimate.com/github/growingabit/pwa-frontend)
 
 This template is a starting point for building apps using a drawer-based
 layout. The layout is provided by `app-layout` elements.
