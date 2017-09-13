@@ -16,5 +16,6 @@ addons:
             - google-chrome-stable
 script:
     - npm run build
-    - npm run test
+    - npm run e2e-headless
+    - npm run units
     - bash <(curl -s https://codecov.io/bash)
