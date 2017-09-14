@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Auth0Lock from "auth0-lock"
 import router from '@/router'
+import User from '@/utils/user'
 
 const lock = new Auth0Lock("aB4EbELMT7MHTwZRDv2ivV5TIFItysL6", "growbit.auth0.com", {
     auth: {
@@ -28,9 +29,9 @@ const auth = {
         token = idToken;
     },
     checkAuth() {
+        console.log('checkAuth');
         token = localStorage.getItem('idToken');
         Vue.http.headers.common['Authorization'] = getAuthHeader();
-        console.log('token', token);
     },
     isAuthenticated() {
         return !!token;
@@ -41,22 +42,11 @@ export default auth;
 
 // Listen for the authenticated event and get profile
 lock.on("authenticated", function(authResult) {
-    console.log('authenticated', authResult);
     auth.setToken(authResult.idToken)
-    router.push('/')
-    // lock.getUserInfo(authResult.accessToken, function(error, profile) {
-    //     if (error) {
-    //         // Handle error
-    //         return;
-    //     }
-    //
-    //     // Save token and profile locally
-    //     localStorage.setItem("accessToken", authResult.accessToken);
-    //     localStorage.setItem("profile", JSON.stringify(profile));
-    //
-    //     // Update DOM
-    //     router.push('/')
-    // });
+    User.load()
+    .then(() => {
+        router.push('/');
+    });
 });
 
 function getAuthHeader() {

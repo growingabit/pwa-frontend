@@ -1,7 +1,42 @@
 <template>
 <div class="home">
-    <h1>{{ msg }}</h1>
+
+    <h1 class="md-headline">Home</h1>
+
     <md-button v-if="!authenticated" @click="signup()" class="md-raised md-primary" id="signup">Sign Up</md-button>
+
+    <md-stepper class="step" ref="stepper" md-vertical v-if="authenticated" @change="submit">
+        <md-step md-button-continue="Submit">
+            <md-input-container md-clearable>
+                <label>Invitation Code</label>
+                <md-input v-model="stages[0].data.invitationCode"></md-input>
+            </md-input-container>
+        </md-step>
+
+        <md-step md-button-continue="Submit">
+            <md-input-container md-clearable>
+                <label>Name</label>
+                <md-input v-model="stages[1].data.name"></md-input>
+            </md-input-container>
+            <md-input-container md-clearable>
+                <label>Surname</label>
+                <md-input v-model="stages[1].data.surname"></md-input>
+            </md-input-container>
+            <md-input-container md-clearable>
+                <label>Birth Date</label>
+                <md-input v-model="stages[1].data.birthdate"></md-input>
+            </md-input-container>
+        </md-step>
+
+
+        <md-step md-button-continue="Submit">
+            <md-input-container md-clearable>
+                <label>Email</label>
+                <md-input v-model="stages[2].data.email"></md-input>
+            </md-input-container>
+        </md-step>
+    </md-stepper>
+
     <md-button v-if="authenticated" @click="logout()" class="md-raised md-primary" id="logout">Log Out</md-button>
 </div>
 </template>
@@ -9,19 +44,41 @@
 
 <script>
 import auth from '@/auth'
+import User from '@/utils/user'
+import router from '@/router'
+
 export default {
     name: "home",
     mounted() {
-        auth.checkAuth();
+        console.log('home init');
         this.authenticated = auth.isAuthenticated();
+        if (this.authenticated) {
+            this.user = User.get();
+            this.stages = this.user.getStages();
+            setTimeout(() => {
+                this.gotoStage(this.user.getCurrentStage().stage);
+            })
+        }
     },
     data() {
         return {
-            msg: "Home",
-            authenticated: false
+            authenticated: false,
+            stages: []
         }
     },
     methods: {
+        submit(index) {
+            if (index === 0) {
+                return;
+            }
+
+            return User.submitStageData(index - 1, this.stages[index - 1].data)
+            .then(user => this.user = user)
+            .then(() => this.gotoStage(index))
+        },
+        gotoStage(index) {
+            router.push(`/stage/${index}`)
+        },
         signup() {
             // Show the Lock Widget and save the user's JWT on a successful login
             auth.signup()
@@ -54,5 +111,19 @@ li {
 
 a {
     color: #42b983;
+}
+
+.home {
+    text-align: center;
+}
+
+.subtitle {
+    padding-bottom: 16px;
+}
+
+.step {
+    text-align: justify;
+    margin-bottom: 16px;
+    margin-top: 16px;
 }
 </style>
