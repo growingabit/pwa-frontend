@@ -6,21 +6,14 @@ const stagesEndpointsMap = [
     'api/v1/me/studentemail'
 ];
 
-function userFactory() {
-    const factory = {
-        get: getUser,
-        load: loadUser,
-        submitStageData: submitStageData
-    };
+let user;
 
-    let user;
-
-    function getUser() {
-        console.log('get');
+class User {
+    static get() {
         return user;
     }
 
-    function loadUser() {
+    static load() {
         return Vue.http.get('api/v1/me')
         .then(res => new User(res.body))
         .then((usr) => {
@@ -29,7 +22,7 @@ function userFactory() {
         });
     }
 
-    function submitStageData(stageIndex, data) {
+    static submitStageData(stageIndex, data) {
         const url = stagesEndpointsMap[stageIndex];
 
         return Vue.http.post(url, data)
@@ -40,12 +33,15 @@ function userFactory() {
         });
     }
 
-    return factory;
-}
+    static isAllowed(stageIndex) {
+        return user && user.isAllowed(stageIndex);
+    }
 
-
-class User {
     constructor(data) {
+        if (!data || !data.id) {
+            throw new Error('Invalid data');
+        }
+
         this.id = data.id;
         this.stages = [];
 
@@ -99,4 +95,4 @@ class User {
     }
 }
 
-export default userFactory();
+export default User;

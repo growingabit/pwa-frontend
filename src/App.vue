@@ -1,13 +1,13 @@
 <template>
 <div id="app">
     <md-toolbar>
-        <md-button class="md-icon-button" @click="toggleLeftSidenav">
+        <md-button v-if="authenticated" class="md-icon-button" @click="toggleLeftSidenav">
             <md-icon>menu</md-icon>
         </md-button>
 
         <h1 class="md-title">Growbit</h1>
     </md-toolbar>
-    <md-sidenav class="main-sidebar md-left" ref="leftSidenav" @open="open('Left')" @close="close('Left')">
+    <md-sidenav class="main-sidebar md-left" ref="leftSidenav">
         <md-toolbar class="md-large">
             <div class="md-toolbar-container">
                 <h3 class="md-title">Sidenav content</h3>
@@ -17,9 +17,7 @@
         <div class="main-sidebar-links">
             <md-list class="md-dense">
                 <md-list-item>
-                    <!-- <router-link exact to="/">Introduction</router-link> -->
-                    <md-button v-if="authenticated" @click="logout()" class="md-raised md-primary" id="logout">Log Out</md-button>
-                    <!-- <router-link exact to="/">Introduction</router-link> -->
+                    <md-button @click="logout()" class="md-raised md-primary" id="logout">Log Out</md-button>
                 </md-list-item>
             </md-list>
         </div>
@@ -36,11 +34,15 @@
 <script>
 import 'vue-material/dist/vue-material.css'
 import auth from '@/auth'
+import router from '@/router'
 
 export default {
     name: 'app',
     mounted() {
-        auth.checkAuth();
+        auth.on('logout', () => {
+            this.authenticated = false;
+        });
+
         this.authenticated = auth.isAuthenticated();
     },
     data() {
@@ -49,20 +51,13 @@ export default {
         }
     },
     methods: {
+        logout() {
+            auth.logout();
+            this.authenticated = false;
+            router.push(`/`);
+        },
         toggleLeftSidenav() {
             this.$refs.leftSidenav.toggle();
-        },
-        toggleRightSidenav() {
-            this.$refs.rightSidenav.toggle();
-        },
-        closeRightSidenav() {
-            this.$refs.rightSidenav.close();
-        },
-        open(ref) {
-            console.log('Opened: ' + ref);
-        },
-        close(ref) {
-            console.log('Closed: ' + ref);
         }
     }
 
