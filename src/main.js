@@ -2,65 +2,36 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import VueResource from 'vue-resource'
-import App from './App'
-import router from './router'
-import routes from './utils/routes'
-import User from './utils/user'
-import auth from './auth'
+import VueMaterial from 'vue-material'
+import VueRouter from 'vue-router'
 
+Vue.use(VueMaterial);
+Vue.use(VueRouter);
 Vue.use(VueResource);
 
-Vue.http.interceptors.unshift((request, next) => {
-    let route = routes.find((item) => {
-        return (request.method === item.method && request.url === item.url);
-    });
-    if (!route) {
-        // we're just going to return a 404 here, since we don't want our test suite making a real HTTP request
-        next(
-            request.respondWith({
-                status: 404,
-                statusText: 'Oh no! Not found!'
-            })
-        );
-    } else {
-        next(
-            request.respondWith(
-                route.response,
-                {
-                    status: 200
-                }
-            )
-        );
-    }
-});
+import App from './App'
+import router from './router'
+import auth from './auth'
 
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
+
+Vue.material.registerTheme('default', {
+    primary: 'blue',
+    accent: 'red',
+    warn: 'red',
+    background: 'white'
+});
 
 init();
 
 function init() {
-    auth.checkAuth();
-    if (auth.isAuthenticated()) {
-        return User.load()
-        .then(() => {
-            /* eslint-disable no-new */
-            new Vue({
-                el: '#app',
-                router,
-                template: '<App/>',
-                components: {
-                    App
-                }
-            });
-        });
-    }
-
     new Vue({
         el: '#app',
         router,
         template: '<App/>',
         components: {
             App
-        }
+        },
+        created: () => auth.checkAuth()
     });
 }

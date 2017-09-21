@@ -39,11 +39,14 @@ import router from '@/router'
 export default {
     name: 'app',
     mounted() {
+        auth.isReady()
+        .then(() => {
+            this.authenticated = auth.isAuthenticated();
+        });
+
         auth.on('logout', () => {
             this.authenticated = false;
         });
-
-        this.authenticated = auth.isAuthenticated();
     },
     data() {
         return {
@@ -54,13 +57,13 @@ export default {
         logout() {
             auth.logout();
             this.authenticated = false;
+            this.toggleLeftSidenav();
             router.push(`/`);
         },
         toggleLeftSidenav() {
             this.$refs.leftSidenav.toggle();
         }
     }
-
 }
 </script>
 

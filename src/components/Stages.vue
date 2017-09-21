@@ -5,15 +5,15 @@
 
     <md-button v-if="!authenticated" @click="signup()" class="md-raised md-primary" id="signup">Sign Up</md-button>
 
-    <md-stepper class="step" ref="stepper" md-vertical v-if="authenticated" @change="submit">
-        <md-step md-button-continue="Submit">
+    <md-stepper class="step" ref="stepper" v-if="authenticated" @completed="completed" @change="submit">
+        <md-step md-label="Invitation Code" md-button-continue="Submit" :md-continue="user.isValid(0)" :md-error="!user.isValid(0)" :md-editable="false" id="0">
             <md-input-container md-clearable>
                 <label>Invitation Code</label>
                 <md-input v-model="stages[0].data.invitationCode"></md-input>
             </md-input-container>
         </md-step>
 
-        <md-step md-button-continue="Submit">
+        <md-step md-label="Personal Data" md-button-continue="Submit" :md-continue="user.isValid(1)" :md-error="!user.isValid(1)" :md-disabled="!stages[0].isDone" id="1">
             <md-input-container md-clearable>
                 <label>Name</label>
                 <md-input v-model="stages[1].data.name"></md-input>
@@ -29,15 +29,27 @@
         </md-step>
 
 
-        <md-step md-button-continue="Submit">
+        <md-step md-label="Email" md-button-continue="Submit" :md-continue="user.isValid(2)" :md-error="!user.isValid(2)" :md-disabled="!stages[0].isDone" id="2">
             <md-input-container md-clearable>
                 <label>Email</label>
                 <md-input v-model="stages[2].data.email"></md-input>
             </md-input-container>
         </md-step>
-    </md-stepper>
 
-    <md-button v-if="authenticated" @click="logout()" class="md-raised md-primary" id="logout">Log Out</md-button>
+        <md-step md-label="Phone Number" md-button-continue="Submit" :md-continue="user.isValid(3)" :md-error="!user.isValid(3)" :md-disabled="!stages[0].isDone" id="3">
+            <md-input-container md-clearable>
+                <label>Phone Number</label>
+                <md-input type="tel" v-model="stages[3].data.phoneNumber"></md-input>
+            </md-input-container>
+        </md-step>
+
+        <md-step md-label="Wallet Address" md-button-continue="Submit" :md-continue="user.isValid(4)" :md-error="!user.isValid(4)" :md-disabled="!stages[0].isDone" id="4">
+            <md-input-container md-clearable>
+                <label>Wallet Address</label>
+                <md-input v-model="stages[4].data.address"></md-input>
+            </md-input-container>
+        </md-step>
+    </md-stepper>
 </div>
 </template>
 
@@ -50,34 +62,67 @@ import router from '@/router'
 export default {
     name: "home",
     mounted() {
-        this.authenticated = auth.isAuthenticated();
+        auth.isReady()
+        .then(() => {
+            this.authenticated = auth.isAuthenticated();
+            this.fakeSubmits = []; // Sigh...
 
-        if (this.authenticated) {
             this.user = User.get();
             this.stages = this.user.getStages();
+
+            const stageIndex = Number(this.$route.params.stageid) - 1;
+
             setTimeout(() => {
-                this.gotoStage(this.user.getCurrentStage().stage);
-            })
-        }
+                const activeStep = this.$refs.stepper.stepList[stageIndex];
+                this.prevStep = stageIndex + 1;
+                this.$refs.stepper.setActiveStep(activeStep);
+            });
+
+        })
     },
     data() {
         return {
             authenticated: false,
-            stages: []
+            stages: [],
+            user: {}
         }
     },
     methods: {
-        submit(index) {
-            if (index === 0) {
+        submit(index) { // index: the next
+            const prevStage = this.prevStep;
+            const nextStage = index + 1;
+            const goingForward = nextStage > prevStage;
+
+            if (this.fakeSubmits.length < 2) {
+                this.fakeSubmits.push(true);
                 return;
             }
 
-            return User.submitStageData(index - 1, this.stages[index - 1].data)
+            if (prevStage === nextStage) {
+                return;
+            }
+
+            if (this.stages[prevStage - 1].isDone || !goingForward  || !this.user.isValid(prevStage - 1)) {
+                this.prevStep = nextStage;
+                return this.gotoStage(nextStage);
+            }
+
+            return User.submitStageData(prevStage - 1, this.stages[prevStage - 1].data)
             .then(user => this.user = user)
-            .then(() => this.gotoStage(index))
+            .then(() => this.stages = this.user.getStages())
+            .then(() => this.prevStep = nextStage)
+            .then(() => this.gotoStage(nextStage))
+        },
+        completed() {
+            const last = this.stages.length - 1;
+
+            return User.submitStageData(last, this.stages[last].data)
+            .then(user => this.user = user)
+            .then(() => this.stages = this.user.getStages())
+            .then(() => this.prevStep = last);
         },
         gotoStage(index) {
-            router.push(`/stage/${index}`)
+            router.push(`/stage/${index}`);
         },
         signup() {
             // Show the Lock Widget and save the user's JWT on a successful login
@@ -94,7 +139,7 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style>
 h1,
 h2 {
     font-weight: normal;
@@ -122,9 +167,7 @@ a {
     padding-bottom: 16px;
 }
 
-.step {
-    text-align: justify;
-    margin-bottom: 16px;
-    margin-top: 16px;
+.md-steps-navigation {
+    overflow-x: auto !important;
 }
 </style>

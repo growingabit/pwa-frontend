@@ -1,9 +1,12 @@
 import Vue from 'vue'
+import dataModels from '@/utils/data-models'
 
 const stagesEndpointsMap = [
     'api/v1/me/invitationcode',
     'api/v1/me/studentdata',
-    'api/v1/me/studentemail'
+    'api/v1/me/studentemail',
+    'api/v1/me/studentphone',
+    'api/v1/me/walletsetup'
 ];
 
 let user;
@@ -14,7 +17,7 @@ class User {
     }
 
     static load() {
-        return Vue.http.get('api/v1/me')
+        return Vue.http.get('http://localhost:8080/api/v1/me')
         .then(res => new User(res.body))
         .then((usr) => {
             user = usr;
@@ -25,16 +28,12 @@ class User {
     static submitStageData(stageIndex, data) {
         const url = stagesEndpointsMap[stageIndex];
 
-        return Vue.http.post(url, data)
+        return Vue.http.post(`http://localhost:8080/${url}`, data)
         .then(res => new User(res.body))
         .then((usr) => {
             user = usr;
             return user;
         });
-    }
-
-    static isAllowed(stageIndex) {
-        return user && user.isAllowed(stageIndex);
     }
 
     constructor(data) {
@@ -51,8 +50,15 @@ class User {
             .reduce((stages, stage) => {
                 stages[stage] = data[key][stage];
                 stages[stage].mandatory = key === 'mandatorySignupStages';
-                stages[stage].stage = stage; // Psychosis intensifies
+                stages[stage].stage = Number(stage) + 1; // Set stage number for view
 
+                if (!stages[stage].data) {
+                    stages[stage].data = Object.keys(dataModels[stage])
+                    .reduce((results, key) => {
+                        results[key] = dataModels[stage][key].val;
+                        return results;
+                    }, {});
+                }
                 return stages;
             }, this.stages);
         });
@@ -79,7 +85,7 @@ class User {
     getStages() {
         let limitReached = false;
         return this.stages.map((stage) => {
-            stage.disabled = limitReached || stage.isDone;
+            stage.disabled = limitReached;
             if (limitReached) {
                 return stage;
             }
@@ -91,7 +97,16 @@ class User {
 
     isAllowed(stageIndex) {
         const stages = this.getStages();
-        return !stages[stageIndex].disabled;
+        return stages[stageIndex] && !stages[stageIndex].disabled;
+    }
+
+
+    isValid(stageIndex) {
+        const defData = dataModels[stageIndex];
+        const defKeys = Object.keys(defData);
+        const stage = this.stages[stageIndex];
+
+        return defKeys.every(key => defData[key].validate(stage.data[key]));
     }
 }
 

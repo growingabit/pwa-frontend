@@ -1,20 +1,8 @@
-import Vue from 'vue'
-import VueMaterial from 'vue-material'
 import Router from 'vue-router'
 import Home from '@/components/Home'
 import Stages from '@/components/Stages'
 import auth from '@/auth'
 import User from '@/utils/user'
-
-Vue.use(Router)
-Vue.use(VueMaterial)
-
-Vue.material.registerTheme('default', {
-    primary: 'blue',
-    accent: 'red',
-    warn: 'red',
-    background: 'white'
-})
 
 const router = new Router({
     mode: 'history',
@@ -22,9 +10,9 @@ const router = new Router({
         path: '/',
         name: 'Home',
         component: Home,
-        beforeEnter: function(to, from, next) {            
+        beforeEnter: function(to, from, next) {
             if (auth.isAuthenticated() && User.get()) {
-                return next('/stage/0');
+                return next('/stage/1');
             }
 
             next();
@@ -34,10 +22,17 @@ const router = new Router({
         name: 'Stages',
         component: Stages,
         beforeEnter: function(to, from, next) {
-            if (User.isAllowed(to.params.stageid)) {
+            const user = User.get();
+            if (!user) {
+                return next('/');
+            }
+
+            if (user.isAllowed(Number(to.params.stageid) - 1)) {
                 return next();
             }
-            return next('/');
+
+            const stageIndex = user.getCurrentStage().stage;
+            return next(`/stage/${stageIndex}`);
         }
     }, {
         path: '*',

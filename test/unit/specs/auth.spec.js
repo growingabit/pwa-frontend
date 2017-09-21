@@ -24,4 +24,4 @@ describe('auth.js', () => {
         expect(auth.isAuthenticated())
             .to.equal(false);
     })
-})
+});

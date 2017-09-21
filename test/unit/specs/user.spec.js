@@ -28,31 +28,31 @@ describe('user.js', () => {
     })
 
     describe('#getCurrentStage', () => {
-        it('should return 0 when no stage has been completed', () => {
+        it('should return 1 when no stage has been completed', () => {
             const user = new User(getUserData());
 
             expect(user.getCurrentStage().stage)
-                .to.equal('0')
+                .to.equal(1)
         });
 
-        it('should return the correct stage', () => {
+        it('should return next stage + 1', () => {
             const data = getUserData();
 
             data.mandatorySignupStages['0'].isDone = true;
             let user = new User(data);
             expect(user.getCurrentStage().stage)
-            .to.equal('1')
+            .to.equal(2)
 
             data.signupStages['1'].isDone = true;
             user = new User(data);
             expect(user.getCurrentStage().stage)
-            .to.equal('2')
+            .to.equal(3)
 
             data.signupStages['2'].isDone = true;
             data.mandatorySignupStages['3'].isDone = true;
             user = new User(data);
             expect(user.getCurrentStage().stage)
-            .to.equal('4')
+            .to.equal(5)
         });
     });
 
@@ -73,13 +73,20 @@ describe('user.js', () => {
             .to.equal(true);
             expect(stages[4].disabled)
             .to.equal(true);
+        });
+
+        it('should return an array of stages with disabled property correctly set', () => {
+            const data = getUserData();
+
+            let user = new User(data);
+            let stages = user.getStages();
 
             data.mandatorySignupStages['0'].isDone = true;
             user = new User(data);
             stages = user.getStages();
 
             expect(stages[0].disabled)
-            .to.equal(true);
+            .to.equal(false);
             expect(stages[1].disabled)
             .to.equal(false);
             expect(stages[2].disabled)
@@ -114,7 +121,7 @@ describe('user.js', () => {
             let user = new User(data);
 
             expect(user.isAllowed(0))
-            .to.equal(false);
+            .to.equal(true);
             expect(user.isAllowed(1))
             .to.equal(true);
             expect(user.isAllowed(2))
