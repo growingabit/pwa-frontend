@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import auth from '@/auth'
+import auth from '@/utils/auth'
 import VueResource from 'vue-resource'
 
 Vue.use(VueResource);

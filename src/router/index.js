@@ -1,7 +1,7 @@
 import Router from 'vue-router'
 import Home from '@/components/Home'
 import Stages from '@/components/Stages'
-import auth from '@/auth'
+import auth from '@/utils/auth'
 import User from '@/utils/user'
 
 const router = new Router({
@@ -15,7 +15,7 @@ const router = new Router({
         name: 'Stages',
         component: Stages,
         beforeEnter: function(to, from, next) {
-            if (!auth.isAuthenticatedSync()) {
+            if (!auth.hasSessionSet()) {
                 return next('/');
             }
 

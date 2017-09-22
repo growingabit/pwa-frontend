@@ -9,9 +9,9 @@ Vue.use(VueMaterial);
 Vue.use(VueRouter);
 Vue.use(VueResource);
 
-import App from './App'
-import router from './router'
-import auth from './auth'
+import App from '@/App'
+import router from '@/router'
+import auth from '@/utils/auth'
 
 Vue.config.productionTip = true;
 Vue.config.silent = false;
@@ -26,8 +26,8 @@ Vue.material.registerTheme('default', {
 init();
 
 function init() {
-    auth.checkAuth();
-    
+    auth.init();
+
     new Vue({
         el: '#app',
         router,

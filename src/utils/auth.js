@@ -37,15 +37,18 @@ class Auth extends EventEmitter {
     onTokenSet() {
         Vue.http.headers.common['Authorization'] = this.getAuthHeader();
         return User.load()
-        .catch(() => {})
         .then(() => {
             ready = true;
             this.emit('ready');
-        });
+        })
+        .catch((err) => {
+            console.log(err);
+            return this.logout();
+        })
     }
 
     // To be used only in router guards to detect if user is not authenticated
-    isAuthenticatedSync() {
+    hasSessionSet() {
         if (token) {
             return true;
         }
@@ -53,7 +56,7 @@ class Auth extends EventEmitter {
         return !!localStorage.getItem('idToken');
     }
 
-    checkAuth() {
+    init() {
         token = localStorage.getItem('idToken');
 
         if (token) {

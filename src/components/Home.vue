@@ -9,7 +9,7 @@
 
 
 <script>
-import auth from '@/auth'
+import auth from '@/utils/auth'
 import User from '@/utils/user'
 import router from '@/router'
 

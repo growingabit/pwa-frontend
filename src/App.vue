@@ -33,7 +33,7 @@
 
 <script>
 import 'vue-material/dist/vue-material.css'
-import auth from '@/auth'
+import auth from '@/utils/auth'
 import router from '@/router'
 
 export default {
