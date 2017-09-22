@@ -22,17 +22,20 @@ const router = new Router({
         name: 'Stages',
         component: Stages,
         beforeEnter: function(to, from, next) {
-            const user = User.get();
-            if (!user) {
-                return next('/');
-            }
+            auth.isReady()
+            .then(() => {
+                const user = User.get();
+                if (!user) {
+                    return next('/');
+                }
 
-            if (user.isAllowed(Number(to.params.stageid) - 1)) {
-                return next();
-            }
+                if (user.isAllowed(Number(to.params.stageid) - 1)) {
+                    return next();
+                }
 
-            const stageIndex = user.getCurrentStage().stage;
-            return next(`/stage/${stageIndex}`);
+                const stageIndex = user.getCurrentStage().stage;
+                return next(`/stage/${stageIndex}`);
+            });
         }
     }, {
         path: '*',

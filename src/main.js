@@ -13,7 +13,8 @@ import App from './App'
 import router from './router'
 import auth from './auth'
 
-Vue.config.productionTip = false;
+Vue.config.productionTip = true;
+Vue.config.silent = false;
 
 Vue.material.registerTheme('default', {
     primary: 'blue',
