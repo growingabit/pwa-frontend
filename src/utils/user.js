@@ -37,7 +37,7 @@ class User {
     }
 
     constructor(data) {
-        if (!data || !data.id) {
+        if (!data) {
             throw new Error('Invalid data');
         }
 

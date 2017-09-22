@@ -12,6 +12,7 @@ const lock = new Auth0Lock("32wl1L4tlptjPImhEvLIbrQSkwmAJx5s", "growbit-developm
 
 let token = null;
 let ready = false;
+let loggedIn = false; // If just logged in with lock during this session
 
 class Auth extends EventEmitter {
     login() {
@@ -52,6 +53,7 @@ class Auth extends EventEmitter {
 
         // Listen for the authenticated event and get profile
         lock.on("authenticated", (res) => {
+            loggedIn = true;
             this.setToken(res.idToken);
             return this.onTokenSet();
         });
@@ -59,11 +61,11 @@ class Auth extends EventEmitter {
 
     isReady() {
         if (ready) {
-            return Promise.resolve();
+            return Promise.resolve(loggedIn);
         }
 
         return new Promise((resolve, reject) => {
-            this.on('ready', resolve);
+            this.on('ready', () => resolve(loggedIn));
         });
     }
 

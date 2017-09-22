@@ -17,5 +17,5 @@ addons:
 script:
     - npm run build
     - npm run e2e-headless
-    - npm run units
+    - npm run unit
     - bash <(curl -s https://codecov.io/bash)

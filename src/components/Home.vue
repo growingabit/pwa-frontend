@@ -17,9 +17,13 @@ export default {
     name: "home",
     mounted() {
         auth.isReady()
-        .then(() => {
+        .then((loggedIn) => {
             this.authenticated = auth.isAuthenticated();
             this.user = User.get();
+
+            if (loggedIn) {
+                this.resumeSignup();
+            }
         });
     },
     data() {
