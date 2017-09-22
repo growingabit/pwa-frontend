@@ -5,7 +5,7 @@
 
     <md-button v-if="!authenticated" @click="signup()" class="md-raised md-primary" id="signup">Sign Up</md-button>
 
-    <md-stepper class="step" ref="stepper" v-if="authenticated" @completed="completed" @change="submit">
+    <md-stepper id="stepper" ref="stepper" v-if="authenticated" @completed="completed" @change="submit">
         <md-step md-label="Invitation Code" md-button-continue="Submit" :md-continue="user.isValid(0)" :md-error="!user.isValid(0)" :md-editable="false" id="0">
             <md-input-container md-clearable>
                 <label>Invitation Code</label>
@@ -169,5 +169,19 @@ a {
 
 .md-steps-navigation {
     overflow-x: auto !important;
+}
+
+#stepper nav::-webkit-scrollbar {
+    height: 8px;
+    padding-right: 10px;
+}
+
+#stepper nav::-webkit-scrollbar-thumb {
+    background-color: rgba(0,0,0,.3);
+    border-radius: 4px;
+}
+
+#stepper nav::-webkit-scrollbar-track {
+    background:rgba(0,0,0,0);
 }
 </style>
