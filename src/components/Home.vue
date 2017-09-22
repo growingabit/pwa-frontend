@@ -22,8 +22,13 @@ export default {
             this.user = User.get();
 
             if (loggedIn) {
-                this.resumeSignup();
+                return this.resumeSignup();
             }
+
+            auth.on('logout', () => {
+                this.authenticated = false;
+                this.user = null;
+            });
         });
     },
     data() {

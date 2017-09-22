@@ -9,14 +9,7 @@ const router = new Router({
     routes: [{
         path: '/',
         name: 'Home',
-        component: Home,
-        beforeEnter: function(to, from, next) {
-            if (auth.isAuthenticated() && User.get()) {
-                return next('/stage/1');
-            }
-
-            next();
-        }
+        component: Home
     }, {
         path: '/stage/:stageid',
         name: 'Stages',
