@@ -26,13 +26,14 @@ Vue.material.registerTheme('default', {
 init();
 
 function init() {
+    auth.checkAuth();
+    
     new Vue({
         el: '#app',
         router,
         template: '<App/>',
         components: {
             App
-        },
-        created: () => auth.checkAuth()
+        }
     });
 }

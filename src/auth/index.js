@@ -44,8 +44,17 @@ class Auth extends EventEmitter {
         });
     }
 
+    // To be used only in router guards to detect if user is not authenticated
+    isAuthenticatedSync() {
+        if (token) {
+            return true;
+        }
+
+        return !!localStorage.getItem('idToken');
+    }
+
     checkAuth() {
-        token = localStorage.getItem('idToken') || null;
+        token = localStorage.getItem('idToken');
 
         if (token) {
             return this.onTokenSet();
