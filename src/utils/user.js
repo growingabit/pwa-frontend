@@ -2,7 +2,7 @@ import Vue from 'vue'
 import dataModels from '@/utils/data-models'
 
 const apis = {
-    production: 'https://abc.growbit.xyz',
+    production: 'https://api.growbit.xyz',
     development: 'http://localhost:8080'
 };
 
