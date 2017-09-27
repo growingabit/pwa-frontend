@@ -4,10 +4,12 @@ import Vue from 'vue'
 import VueResource from 'vue-resource'
 import VueMaterial from 'vue-material'
 import VueRouter from 'vue-router'
+import VueClipboards from 'vue-clipboards'
 
 Vue.use(VueMaterial);
 Vue.use(VueRouter);
 Vue.use(VueResource);
+Vue.use(VueClipboards);
 
 import App from '@/App'
 import router from '@/router'

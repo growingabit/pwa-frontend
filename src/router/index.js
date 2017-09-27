@@ -35,9 +35,22 @@ const router = new Router({
     }, {
         path: '/verify/email/:codeBase64',
         component: {
-            template: '',
+            template: '<span></span>',
             mounted: function() {
-                console.log(this.$route.params.codeBase64);
+                const code = this.$route.params.codeBase64;
+                if (!code || !auth.hasSessionSet()) {
+                    return this.$router.push('/');
+                }
+
+                this.$http.get(`http://127.0.0.1:8080/api/v1/verify/email/${code}`)
+                .then((res) => {
+                    console.log(res);
+                    this.$router.push('/');
+                })
+                .catch((err) => {
+                    console.log(err);
+                    this.$router.push('/');
+                });
             }
         }
     }, {
