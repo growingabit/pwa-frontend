@@ -2,8 +2,9 @@ import Vue from 'vue'
 import Auth0Lock from "auth0-lock"
 import EventEmitter from 'eventemitter3'
 import User from '@/utils/user'
+import config from '@/utils/config'
 
-const lock = new Auth0Lock("32wl1L4tlptjPImhEvLIbrQSkwmAJx5s", "growbit-development.eu.auth0.com", {
+const lock = new Auth0Lock(config.auth0.clientID, config.auth0.domain, {
     auth: {
         redirectUrl: 'http://localhost:8081/oauth2/callback',
         responseType: 'token id_token'

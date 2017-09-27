@@ -1,12 +1,8 @@
 import Vue from 'vue'
 import dataModels from '@/utils/data-models'
+import config from '@/utils/config'
 
-const apis = {
-    production: 'https://api.growbit.xyz',
-    development: 'http://localhost:8080'
-};
-
-const apiUrl = apis[process.env.NODE_ENV];
+const apiUrl = config.apiUrl;
 
 class Req {
     constructor(path, method) {
