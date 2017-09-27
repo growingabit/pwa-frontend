@@ -15,8 +15,10 @@ import App from '@/App'
 import router from '@/router'
 import auth from '@/utils/auth'
 
-Vue.config.productionTip = true;
-Vue.config.silent = false;
+if (process.env.NODE_ENV === 'production') {
+    Vue.config.productionTip = false;
+    Vue.config.silent = true;
+}
 
 Vue.material.registerTheme('default', {
     primary: 'blue',

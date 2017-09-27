@@ -1,6 +1,13 @@
 import Vue from 'vue'
 import dataModels from '@/utils/data-models'
 
+const apis = {
+    production: 'https://abc.growbit.xyz',
+    development: 'http://localhost:8080'
+};
+
+const apiUrl = apis[process.env.NODE_ENV];
+
 class Req {
     constructor(path, method) {
         this.path = path;
@@ -26,7 +33,7 @@ class User {
     }
 
     static load() {
-        return Vue.http.get('http://localhost:8080/api/v1/me')
+        return Vue.http.get(`${apiUrl}/api/v1/me`)
         .then(res => new User(res.body))
         .then((usr) => {
             user = usr;
@@ -37,7 +44,7 @@ class User {
     static retrieveStageData(stageIndex) {
         const req = stagesEndpointsMap[stageIndex];
 
-        return Vue.http[req.method](`http://localhost:8080/${req.path}`)
+        return Vue.http[req.method](`${apiUrl}/api/v1/me/${req.path}`)
         .then(res => new User(res.body))
         .then((usr) => {
             user = usr;
@@ -57,7 +64,7 @@ class User {
             return result;
         }, {});
 
-        return Vue.http[req.method](`http://localhost:8080/${req.path}`, body)
+        return Vue.http[req.method](`${apiUrl}/api/v1/me/${req.path}`, body)
         .then(res => new User(res.body))
         .then((usr) => {
             user = usr;
