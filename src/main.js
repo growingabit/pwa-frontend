@@ -18,6 +18,9 @@ import auth from '@/utils/auth'
 if (process.env.NODE_ENV === 'production') {
     Vue.config.productionTip = false;
     Vue.config.silent = true;
+    if (window.location.href.indexOf('https') !== 0) {
+        window.location.href = window.location.href.replace('http','https');
+    }
 }
 
 Vue.material.registerTheme('default', {
