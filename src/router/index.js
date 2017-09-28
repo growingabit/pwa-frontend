@@ -3,6 +3,7 @@ import Home from '@/components/Home'
 import Stages from '@/components/Stages'
 import auth from '@/utils/auth'
 import User from '@/utils/user'
+import config from '@/utils/config'
 
 const router = new Router({
     mode: 'history',
@@ -44,7 +45,7 @@ const router = new Router({
 
                 auth.isReady()
                 .then(() => {
-                    return this.$http.get(`http://127.0.0.1:8080/api/v1/verify/email/${code}`);
+                    return this.$http.get(`${config.apiUrl}/api/v1/verify/email/${code}`);
                 })
                 .then((res) => {
                     console.log(res);
