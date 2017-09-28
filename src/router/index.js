@@ -42,7 +42,10 @@ const router = new Router({
                     return this.$router.push('/');
                 }
 
-                this.$http.get(`http://127.0.0.1:8080/api/v1/verify/email/${code}`)
+                auth.isReady()
+                .then(() => {
+                    return this.$http.get(`http://127.0.0.1:8080/api/v1/verify/email/${code}`);
+                })
                 .then((res) => {
                     console.log(res);
                     this.$router.push('/');
