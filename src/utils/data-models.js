@@ -47,8 +47,14 @@ class PhoneNumberModel extends StringModel {
     }
 }
 
+class InvitationCodeModel extends StringModel {
+    validate(val) {
+        return val && val.length === 7;
+    }
+}
+
 export default [
-    { invitationCode: new StringModel() },
+    { invitationCode: new InvitationCodeModel() },
     {
         name: new StringModel(),
         surname: new StringModel(),

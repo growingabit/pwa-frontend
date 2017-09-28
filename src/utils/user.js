@@ -39,8 +39,7 @@ class User {
 
     static retrieveStageData(stageIndex) {
         const req = stagesEndpointsMap[stageIndex];
-
-        return Vue.http[req.method](`${apiUrl}/api/v1/me/${req.path}`)
+        return Vue.http[req.method](`${apiUrl}/${req.path}`)
         .then(res => new User(res.body))
         .then((usr) => {
             user = usr;
@@ -60,7 +59,7 @@ class User {
             return result;
         }, {});
 
-        return Vue.http[req.method](`${apiUrl}/api/v1/me/${req.path}`, body)
+        return Vue.http[req.method](`${apiUrl}/${req.path}`, body)
         .then(res => new User(res.body))
         .then((usr) => {
             user = usr;

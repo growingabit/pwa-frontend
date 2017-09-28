@@ -1,12 +1,11 @@
 <template>
 <div class="main">
-
     <h1 class="md-headline">Sign Up</h1>
 
     <md-button v-if="!authenticated" @click="signup()" class="md-raised md-primary" id="signup">Sign Up</md-button>
 
     <md-stepper id="stepper" ref="stepper" v-if="authenticated" @completed="completed" @change="submit">
-        <md-step md-label="Invitation Code" md-button-continue="Submit" :md-continue="user.isValid(0)"  :md-editable="false" id="0">
+        <md-step md-label="Invitation Code" md-button-continue="Submit" :md-continue="user.isValid(0)"  :md-editable="!stages[0].isDone" id="0">
             <md-input-container md-clearable v-bind:class="{ 'md-input-invalid': !user.isValid(0) }">
                 <label>Invitation Code</label>
                 <md-input v-model="stages[0].data.invitationCode"></md-input>
@@ -131,6 +130,11 @@ export default {
             this.$refs.snackbar.open();
         },
         submit(index) { // index: the next
+            if (this.submitError) {
+                this.submitError = false;
+                return;
+            }
+
             const prevStage = this.prevStep;
             const nextStage = index + 1;
             const goingForward = nextStage > prevStage;
@@ -177,7 +181,11 @@ export default {
                 }
             })
             .catch((err) => {
-                console.log(err);
+                this.submitError = true;
+                const prevStep = this.$refs.stepper.stepList[prevStage - 1];
+                this.$refs.stepper.setActiveStep(prevStep);
+
+                this.gotoStage(prevStage);
                 this.message = `An error happened while submitting stage ${prevStage} data.`;
                 this.$refs.snackbar.open();
             });
