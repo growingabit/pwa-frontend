@@ -38,6 +38,7 @@ class User {
     }
 
     static retrieveStageData(stageIndex) {
+        stageIndex -= 1;
         const req = stagesEndpointsMap[stageIndex];
         return Vue.http[req.method](`${apiUrl}/${req.path}`)
         .then(res => new User(res.body))
@@ -48,6 +49,7 @@ class User {
     }
 
     static submitStageData(stageIndex, data) {
+        stageIndex -= 1;
         const req = stagesEndpointsMap[stageIndex];
         const stageModels = dataModels[stageIndex];
 
@@ -98,7 +100,7 @@ class User {
     }
 
     getStage(i) {
-        return this.stages[i];
+        return this.stages[i - 1];
     }
 
     getCurrentStage() {
@@ -129,17 +131,27 @@ class User {
     }
 
     isAllowed(stageIndex) {
+        stageIndex -= 1;
         const stages = this.getStages();
         return stages[stageIndex] && !stages[stageIndex].disabled;
     }
 
 
-    isValid(stageIndex) {
+    isStageValid(stageIndex) {
+        stageIndex -= 1;
         const model = dataModels[stageIndex];
         const defKeys = Object.keys(model);
         const stage = this.stages[stageIndex];
 
         return defKeys.every(key => model[key].validate(stage.data[key]));
+    }
+
+    isStageFieldValid(stageIndex, fieldKey) {
+        stageIndex -= 1;
+        const model = dataModels[stageIndex];
+        const stage = this.stages[stageIndex];
+
+        return model[fieldKey].validate(stage.data[fieldKey]);
     }
 }
 

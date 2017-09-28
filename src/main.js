@@ -5,11 +5,13 @@ import VueResource from 'vue-resource'
 import VueMaterial from 'vue-material'
 import VueRouter from 'vue-router'
 import VueClipboards from 'vue-clipboards'
+import VueForm from 'vue-form';
 
 Vue.use(VueMaterial);
 Vue.use(VueRouter);
 Vue.use(VueResource);
 Vue.use(VueClipboards);
+Vue.use(VueForm);
 
 import App from '@/App'
 import router from '@/router'

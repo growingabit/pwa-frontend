@@ -1,6 +1,9 @@
 import Router from 'vue-router'
 import Home from '@/components/Home'
-import Stages from '@/components/Stages'
+import Stage1 from '@/components/Stage1'
+import Stage2 from '@/components/Stage2'
+import Stage3 from '@/components/Stage3'
+import Stage4 from '@/components/Stage4'
 import auth from '@/utils/auth'
 import User from '@/utils/user'
 import config from '@/utils/config'
@@ -12,28 +15,54 @@ const router = new Router({
         name: 'Home',
         component: Home
     }, {
-        path: '/stage/:stageid',
-        name: 'Stages',
-        component: Stages,
+        path: '/stage/1',
+        name: 'Stage1',
+        component: Stage1,
         beforeEnter: function(to, from, next) {
-            if (!auth.hasSessionSet()) {
-                return next('/');
-            }
-
-            auth.isReady()
-            .then(() => {
-                const user = User.get();
-                if (!user) {
-                    return next('/');
-                }
-                if (user.isAllowed(Number(to.params.stageid) - 1)) {
-                    return next();
-                }
-                const stageIndex = user.getCurrentStage().stage;
-                return next(`/stage/${stageIndex}`);
-            });
+            return beforeStage(1, next);
         }
-    }, {
+    },
+    {
+        path: '/stage/2',
+        name: 'Stage2',
+        component: Stage2,
+        beforeEnter: function(to, from, next) {
+            return beforeStage(2, next);
+
+        }
+    },
+    {
+        path: '/stage/3',
+        name: 'Stage3',
+        component: Stage3,
+        beforeEnter: function(to, from, next) {
+            return beforeStage(3, next);
+        }
+    },
+    {
+        path: '/stage/4',
+        name: 'Stage4',
+        component: Stage4,
+        beforeEnter: function(to, from, next) {
+            return beforeStage(4, next);
+        }
+    },
+    // {
+    //     path: '/stage/5',
+    //     name: 'Stage5',
+    //     component: Stage5,
+    //     beforeEnter: function(to, from, next) {
+    //         return beforeStage(5, next);
+    //     }
+    // }, {
+    //     path: '/stage/6',
+    //     name: 'Stage6',
+    //     component: Stage6,
+    //     beforeEnter: function(to, from, next) {
+    //         return beforeStage(6, next);
+    //     }
+    // },
+    {
         path: '/verify/email/:codeBase64',
         component: {
             template: '<span></span>',
@@ -62,5 +91,28 @@ const router = new Router({
         redirect: '/'
     }]
 });
+
+function beforeStage(stageIndex, next) {
+    console.log('start');
+    if (!auth.hasSessionSet()) {
+        console.log('vai cavallino');
+        return next('/cavallo');
+    }
+    console.log('2');
+    auth.isReady()
+    .then(() => {
+        const user = User.get();
+        console.log(user);
+        if (!user) {
+            return next('/');
+        }
+        if (user.isAllowed(stageIndex)) {
+            return next();
+        }
+
+        stageIndex = user.getCurrentStage().stage;
+        return next(`/stage/${stageIndex}`);
+    });
+}
 
 export default router

@@ -15,7 +15,7 @@ import router from '@/router'
 
 export default {
     name: "home",
-    mounted() {
+    mounted() {        
         auth.isReady()
         .then((loggedIn) => {
             this.authenticated = auth.isAuthenticated();

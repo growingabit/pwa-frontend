@@ -47,6 +47,12 @@ class PhoneNumberModel extends StringModel {
     }
 }
 
+class BirthdateModel extends StringModel {
+    validate(val) {
+        return val && /[0-9]{2}\/[0-9]{2}\/[0-9]{4}/.test(val);
+    }
+}
+
 class InvitationCodeModel extends StringModel {
     validate(val) {
         return val && val.length === 7;
@@ -58,7 +64,7 @@ export default [
     {
         name: new StringModel(),
         surname: new StringModel(),
-        birthdate: new StringModel()
+        birthdate: new BirthdateModel()
     },
     { email: new EmailModel },
     { phoneNumber: new PhoneNumberModel() },

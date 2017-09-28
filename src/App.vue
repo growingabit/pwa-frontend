@@ -77,5 +77,8 @@ export default {
     padding: 16px;
 }
 
+.stage {
+    text-align: center;
+}
 
 </style>
