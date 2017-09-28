@@ -21,6 +21,16 @@ const stagesEndpointsMap = [
     new Req('api/v1/me/parentphone')
 ];
 
+const stagesNames = [
+    'Codice di Invito',
+    'Dati Personali',
+    'Indirizzo Email',
+    'Numero di Telefono',
+    'Indirizzo Wallet',
+    'Otp Blockcerts',
+    'Numero di Telefono Genitore'
+];
+
 let user;
 
 class User {
@@ -84,7 +94,9 @@ class User {
 
                 stage.mandatory = key === 'mandatorySignupStages';
                 stage.stage = Number(index) + 1; // Set stage number for view
+                stage.path = `stage/${stage.stage}`;
                 stage.awaitingVerification = !stage.isDone && !!stage.data;
+                stage.name = stagesNames[index];
 
                 stage.data = Object.keys(dataModels[index])
                 .reduce((results, key) => {

@@ -8,16 +8,39 @@
         <h1 class="md-title">Growbit</h1>
     </md-toolbar>
     <md-sidenav class="main-sidebar md-left" ref="leftSidenav">
-        <md-toolbar class="md-large">
-            <div class="md-toolbar-container">
-                <h3 class="md-title">Sidenav content</h3>
-            </div>
+        <md-toolbar class="growbit-logo">
+            <router-link exact to="/">
+                <img src="/static/growbitlogo.png" alt="Growbit">
+            </router-link>
         </md-toolbar>
 
         <div class="main-sidebar-links">
-            <md-list class="md-dense">
+            <md-list>
+                <md-list-item @click="logout()">
+                    <span>Log Out</span>
+                </md-list-item>
+                <md-divider></md-divider>
                 <md-list-item>
-                    <md-button @click="logout()" class="md-raised md-primary" id="logout">Log Out</md-button>
+                    <span>Stage Registrazione</span>
+                    <md-list-expand>
+                        <md-list>
+                            <md-list-item v-for="stage in stages" :key="stage.name" v-bind:class="{ done: stage.isDone, verify: stage.awaitingVerification  }" class="md-inset" :disabled="stage.disabled">
+                                <router-link exact :to="stage.path">{{stage.name}}</router-link>
+                            </md-list-item>
+
+                            <!-- <md-list-item class="md-inset" v-bind:class="{ done: stages[1].isDone, verify: stages[1].awaitingVerification  }" :disabled="stages[1].disabled">
+                                <router-link exact to="/stage/2">Dati personali</router-link>
+                            </md-list-item>
+
+                            <md-list-item class="md-inset" v-bind:class="{ done: stages[2].isDone, verify: stages[2].awaitingVerification  }" :disabled="stages[2].disabled">
+                                <router-link exact to="/stage/3">Email</router-link>
+                            </md-list-item>
+
+                            <md-list-item class="md-inset" v-bind:class="{ done: stages[3].isDone, verify: stages[3].awaitingVerification  }" :disabled="stages[3].disabled">
+                                <router-link exact to="/stage/4">Numero di telefono</router-link>
+                            </md-list-item> -->
+                        </md-list>
+                    </md-list-expand>
                 </md-list-item>
             </md-list>
         </div>
@@ -34,6 +57,7 @@
 <script>
 import 'vue-material/dist/vue-material.css'
 import auth from '@/utils/auth'
+import User from '@/utils/user'
 import router from '@/router'
 
 export default {
@@ -42,6 +66,8 @@ export default {
         auth.isReady()
         .then(() => {
             this.authenticated = auth.isAuthenticated();
+            this.user = User.get();
+            this.stages = this.user.getStages();
         });
 
         auth.on('logout', () => {
@@ -50,7 +76,8 @@ export default {
     },
     data() {
         return {
-            authenticated: false
+            authenticated: false,
+            stages: []
         }
     },
     methods: {
@@ -79,6 +106,53 @@ export default {
 
 .stage {
     text-align: center;
+}
+
+.growbit-logo {
+    font-size: 24px;
+}
+
+.growbit-logo a {
+    width: 100%;
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+    color: inherit;
+    text-decoration: none;
+}
+
+.growbit-logo a &:hover {
+    color: inherit;
+    text-decoration: none;
+}
+
+.growbit-logo a img {
+    max-height: 200px !important;
+    margin-bottom: 16px;
+    margin-top: 8px;
+}
+
+.main-sidebar-links {
+    overflow: auto;
+    flex: 1;
+}
+
+.main-sidebar-links .md-inset .md-list-item-container {
+    padding-left: 36px;
+}
+
+.main-sidebar-links .md-list-item-container {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.done {
+    color: #00C853;
+}
+
+.verify {
+    color: #ff4911
 }
 
 </style>
