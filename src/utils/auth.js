@@ -6,7 +6,7 @@ import config from '@/utils/config'
 
 const lock = new Auth0Lock(config.auth0.clientID, config.auth0.domain, {
     auth: {
-        redirectUrl: 'http://localhost:8081/oauth2/callback',
+        redirectUrl: config.auth0.redirectUrl,
         responseType: 'token id_token'
     }
 });
