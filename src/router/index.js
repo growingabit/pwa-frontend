@@ -87,6 +87,12 @@ const router = new Router({
             }
         }
     }, {
+        path: '/oauth2/callback',
+        component: Home,
+        props: () => {
+            return { awaitingAuthentication: true };
+        }
+    }, {
         path: '*',
         redirect: '/'
     }]

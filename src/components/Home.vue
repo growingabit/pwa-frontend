@@ -1,9 +1,14 @@
 <template>
 <div class="home">
-    <h1 class="md-headline">Home</h1>
+    <h1 v-if="!awaitingAuthentication" class="md-headline">Home</h1>
+    <md-button v-show="!authenticated && !awaitingAuthentication" @click="signup()" class="md-raised md-primary" id="signup">Entra</md-button>
+    <md-button v-show="authenticated && !awaitingAuthentication" @click="resumeSignup()" class="md-raised md-primary" id="logout">Riprendi la Registrazione</md-button>
+    <md-spinner v-show="awaitingAuthentication" md-indeterminate class="md-warn"></md-spinner>
 
-    <md-button v-if="!authenticated" @click="signup()" class="md-raised md-primary" id="signup">Enter</md-button>
-    <md-button v-if="authenticated" @click="resumeSignup()" class="md-raised md-primary" id="logout">Resume Registration</md-button>
+    <md-snackbar md-position="bottom right" ref="snackbar">
+        <span>{{message}}</span>
+        <md-button class="md-accent" md-theme="light-blue" @click="$refs.snackbar.close()">Chiudi</md-button>
+    </md-snackbar>
 </div>
 </template>
 
@@ -15,29 +20,40 @@ import router from '@/router'
 
 export default {
     name: "home",
-    mounted() {        
-        auth.isReady()
-        .then((loggedIn) => {
-            this.authenticated = auth.isAuthenticated();
-            this.user = User.get();
+    props: ['awaitingAuthentication'],
+    mounted() {
+        if (this.awaitingAuthentication) {
+            return auth.isReady()
+            .then(() => router.push('/'))
+            .then(() => this.init())
+        }
 
-            if (loggedIn) {
-                return this.resumeSignup();
-            }
-
-            auth.on('logout', () => {
-                this.authenticated = false;
-                this.user = null;
-            });
-        });
+        this.init();
     },
     data() {
         return {
             authenticated: false,
-            stages: []
+            stages: [],
+            loading: false,
+            message: ''
         }
     },
     methods: {
+        init() {
+            this.authenticated = auth.isAuthenticated();
+            this.user = User.get();
+
+            auth.once('logout', () => {
+                this.authenticated = false;
+                this.user = null;
+            });
+
+            return auth.isReady()
+            .then(() => {
+                this.authenticated = auth.isAuthenticated();
+                this.user = User.get();
+            })
+        },
         signup() {
             auth.logout();
             // Show the Lock Widget and save the user's JWT on a successful login

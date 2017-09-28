@@ -15,7 +15,7 @@
 
     <md-snackbar md-position="bottom right" ref="snackbar">
         <span>{{message}}</span>
-        <md-button class="md-accent" md-theme="light-blue" @click="$refs.snackbar.close()">Close</md-button>
+        <md-button class="md-accent" @click="$refs.snackbar.close()">Chiudi</md-button>
     </md-snackbar>
 </div>
 </template>
