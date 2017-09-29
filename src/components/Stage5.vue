@@ -3,13 +3,13 @@
     <h1 class="md-headline">Indirizzo Wallet</h1>
     <vue-form :state="fs" @submit.prevent="onSubmit">
         <validate tag="label">
-            <md-input-container md-clearable v-bind:class="{ 'md-input-invalid': (!user.isStageValid(5) || fs.$invalid) && fs.$dirty }">
+            <md-input-container md-clearable v-bind:class="{ 'md-input-invalid': !user.isStageValid(5) }">
                 <label>Indirizzo Wallet</label>
-                <md-input :disabled="stage.isDone" v-model="stage.data.invitationCode" name="invitationCode" required></md-input>
+                <md-input :disabled="stage.isDone" v-model="stage.data.address" name="address" required></md-input>
                 <span class="md-error">Indirizzo non valido</span>
             </md-input-container>
         </validate>
-        <md-button v-if="!loading" :disabled="!user.isStageValid(5) || fs.$invalid || stage.isDone" type="submit">Invia</md-button>
+        <md-button v-if="!loading" :disabled="!user.isStageValid(5) || stage.isDone" type="submit">Invia</md-button>
         <md-spinner v-if="loading" md-indeterminate class="md-warn"></md-spinner>
     </vue-form>
 
