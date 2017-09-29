@@ -4,16 +4,18 @@
     <vue-form :state="fs" @submit.prevent="onSubmit">
         <validate>
             <label>Numero di telefono</label>
-            <md-input-container md-clearable v-bind:class="{ 'md-input-invalid': !validity.phoneNumber }">
+            <md-input-container md-clearable v-bind:class="{ 'md-input-invalid': !user.isStageValid(7) }">
                 <md-input :disabled="stage.awaitingVerification || stage.isDone" name="phoneNumber" v-model="stage.data.phoneNumber" required></md-input>
+                <md-input :disabled="stage.awaitingVerification || stage.isDone" name="name" v-model="stage.data.name" required></md-input>
+                <md-input :disabled="stage.awaitingVerification || stage.isDone" name="surname" v-model="stage.data.surname" required></md-input>
                 <span class="md-error">Numero di telefono non valido</span>
             </md-input-container>
         </validate>
 
-        <md-button v-if="!loading" :disabled="fs.$invalid || stage.awaitingVerification" type="submit">Invia</md-button>
+        <md-button v-if="!loading" :disabled="stage.awaitingVerification" type="submit">Invia</md-button>
         <md-spinner v-if="!fs || loading" md-indeterminate class="md-warn"></md-spinner>
     </vue-form>
-    <md-button :disabled="!stage.awaitingVerification || (fs.verificationCode && fs.verificationCode.$invalid)" @click="next">Prosegui</md-button>
+    <md-button :disabled="stage.awaitingVerification" @click="next">Prosegui</md-button>
 
     <md-snackbar md-position="bottom right" ref="snackbar">
         <span>{{message}}</span>
@@ -39,16 +41,19 @@ export default {
     computed: {
         // a computed getter
         validity: function () {
-            if (!this.fs.phoneNumber) {
-                return {
-                    phoneNumber: true
-                }
-            }
-
+          if (!this.fs.name || !this.fs.surname || !this.fs.phoneNumber) {
             return {
-                verificationCode: this.fs.verificationCode && (this.fs.verificationCode.$valid || this.fs.verificationCode.$pristine),
-                phoneNumber: this.user.isStageFieldValid(7, 'phoneNumber') || this.fs.phoneNumber.$pristine
+              name: true,
+              surname: true,
+              phoneNumber: true
             }
+          }
+
+          return {
+            name: this.fs.name.$valid || this.fs.name.$pristine,
+            surname: this.fs.surname.$valid || this.fs.surname.$pristine,
+            phoneNumber: this.user.isStageFieldValid(7, 'phoneNumber') || this.fs.phoneNumber.$pristine,
+          }
         }
     },
 

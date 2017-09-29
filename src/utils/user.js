@@ -58,7 +58,7 @@ class User {
         });
     }
 
-    static submitStageData(stageIndex, data) {
+    static bsubmitStageData(stageIndex, data) {
         stageIndex -= 1;
         const req = stagesEndpointsMap[stageIndex];
         const stageModels = dataModels[stageIndex];

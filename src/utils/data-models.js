@@ -71,5 +71,6 @@ export default [
     { phoneNumber: new PhoneNumberModel() },
     { address: new WalletAddressModel() },
     { nonce: new StringModel() }, // blockcerts no data required
-    { phoneNumber: new PhoneNumberModel() }
+    { name: new StringModel() },
+    { surname: new StringModel() }
 ];
