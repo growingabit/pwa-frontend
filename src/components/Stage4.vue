@@ -4,7 +4,7 @@
     <vue-form :state="fs" @submit.prevent="onSubmit">
         <validate>
             <md-input-container md-clearable v-bind:class="{ 'md-input-invalid': !validity.phoneNumber }">
-                <md-input :disabled="stage.awaitingVerification" name="phoneNumber" v-model="stage.data.phoneNumber" required></md-input>
+                <md-input :disabled="stage.awaitingVerification || stage.isDone" name="phoneNumber" v-model="stage.data.phoneNumber" required></md-input>
                 <span class="md-error">Numero di telefono non valido</span>
             </md-input-container>
         </validate>
@@ -75,8 +75,10 @@ export default {
             });
         },
         next() {
+            this.loading = true;
             return User.load()
             .then((user) => {
+                this.loading = false;
                 this.user = user;
                 this.stage = user.getStage(4);
                 if (this.stage.isDone) {
@@ -86,6 +88,12 @@ export default {
                     this.$refs.snackbar.open();
                 }
             })
+            .catch((err) => {
+                console.log(err);
+                this.loading = false;
+                this.message = "E' avvenuto un errore durante l'invio dei dati";
+                this.$refs.snackbar.open();
+            });
         }
     }
 }

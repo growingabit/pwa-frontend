@@ -1,0 +1,12 @@
+{
+  "short_name": "Growbit",
+  "name": "Growbit Pwa",
+  "start_url": "/",
+  "theme-color": "#2196f3",
+  "background_color": "#2196f3",
+  "icons": [{
+    "src": "static/growbitlogo.png",
+    "type": "image/png",
+    "sizes": "192x192"
+  }]
+}

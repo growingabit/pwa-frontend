@@ -24,21 +24,9 @@
                     <span>Stage Registrazione</span>
                     <md-list-expand>
                         <md-list>
-                            <md-list-item v-for="stage in stages" :key="stage.name" v-bind:class="{ done: stage.isDone, verify: stage.awaitingVerification  }" class="md-inset" :disabled="stage.disabled">
+                            <md-list-item v-for="stage in stages" :key="stage.name" v-bind:class="{ done: stage.isDone, verify: stage.awaitingVerification  }" class="md-inset" :disabled="stage.disabled">                                
                                 <router-link exact :to="stage.path">{{stage.name}}</router-link>
                             </md-list-item>
-
-                            <!-- <md-list-item class="md-inset" v-bind:class="{ done: stages[1].isDone, verify: stages[1].awaitingVerification  }" :disabled="stages[1].disabled">
-                                <router-link exact to="/stage/2">Dati personali</router-link>
-                            </md-list-item>
-
-                            <md-list-item class="md-inset" v-bind:class="{ done: stages[2].isDone, verify: stages[2].awaitingVerification  }" :disabled="stages[2].disabled">
-                                <router-link exact to="/stage/3">Email</router-link>
-                            </md-list-item>
-
-                            <md-list-item class="md-inset" v-bind:class="{ done: stages[3].isDone, verify: stages[3].awaitingVerification  }" :disabled="stages[3].disabled">
-                                <router-link exact to="/stage/4">Numero di telefono</router-link>
-                            </md-list-item> -->
                         </md-list>
                     </md-list-expand>
                 </md-list-item>

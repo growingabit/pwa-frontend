@@ -87,6 +87,30 @@ const router = new Router({
             }
         }
     }, {
+        path: '/verify/phone/:code',
+        component: {
+            template: '<span></span>',
+            mounted: function() {
+                const code = this.$route.params.code;
+                if (!code || !auth.hasSessionSet()) {
+                    return this.$router.push('/');
+                }
+
+                auth.isReady()
+                .then(() => {
+                    return this.$http.get(`${config.apiUrl}/api/v1/verify/phone/${code}`);
+                })
+                .then((res) => {
+                    console.log(res);
+                    this.$router.push('/');
+                })
+                .catch((err) => {
+                    console.log(err);
+                    this.$router.push('/');
+                });
+            }
+        }
+    }, {
         path: '/oauth2/callback',
         component: Home,
         props: () => {
@@ -99,16 +123,12 @@ const router = new Router({
 });
 
 function beforeStage(stageIndex, next) {
-    console.log('start');
     if (!auth.hasSessionSet()) {
-        console.log('vai cavallino');
-        return next('/cavallo');
+        return next('/');
     }
-    console.log('2');
     auth.isReady()
     .then(() => {
         const user = User.get();
-        console.log(user);
         if (!user) {
             return next('/');
         }

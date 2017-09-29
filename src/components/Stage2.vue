@@ -5,19 +5,19 @@
         <validate>
             <md-input-container md-clearable v-bind:class="{ 'md-input-invalid': !validity.name }">
                 <label>Nome</label>
-                <md-input v-model="stage.data.name" name="name" required></md-input>
+                <md-input :disabled="stage.isDone v-model="stage.data.name" name="name" required></md-input>
             </md-input-container>
         </validate>
         <validate tag="label">
             <md-input-container md-clearable v-bind:class="{ 'md-input-invalid': !validity.surname }">
                 <label>Cognome</label>
-                <md-input v-model="stage.data.surname" name="surname" required></md-input>
+                <md-input :disabled="stage.isDone v-model="stage.data.surname" name="surname" required></md-input>
             </md-input-container>
         </validate>
         <validate>
             <md-input-container md-clearable v-bind:class="{ 'md-input-invalid': !validity.birthdate }">
                 <label>Data di nascita</label>
-                <md-input v-model="stage.data.birthdate" name="birthdate" required placeholder="gg/mm/aaaa"></md-input>
+                <md-input :disabled="stage.isDone v-model="stage.data.birthdate" name="birthdate" required placeholder="gg/mm/aaaa"></md-input>
                 <span class="md-error">Data non valida. Usa il formato gg/mm/aaaa.</span>
             </md-input-container>
         </validate>

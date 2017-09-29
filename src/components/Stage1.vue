@@ -5,7 +5,7 @@
         <validate tag="label">
             <md-input-container md-clearable v-bind:class="{ 'md-input-invalid': (!user.isStageValid(1) || fs.$invalid) && fs.$dirty }">
                 <label>Codice di invito</label>
-                <md-input v-model="stage.data.invitationCode" name="invitationCode" required></md-input>
+                <md-input :disabled="stage.isDone" v-model="stage.data.invitationCode" name="invitationCode" required></md-input>
                 <span class="md-error">Codice non valido</span>
             </md-input-container>
         </validate>

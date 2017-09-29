@@ -5,13 +5,13 @@
         <validate>
             <md-input-container md-clearable v-bind:class="{ 'md-input-invalid': !validity.email }">
                 <label>Email</label>
-                <md-input :disabled="stage.awaitingVerification" type="email" v-model="stage.data.email" name="email" required></md-input>
+                <md-input :disabled="stage.awaitingVerification || stage.isDone" type="email" v-model="stage.data.email" name="email" required></md-input>
             </md-input-container>
         </validate>
-        <md-button v-if="!loading" :disabled="fs.$invalid || stage.awaitingVerification" type="submit">Invia</md-button>
-        <md-spinner v-if="!fs || loading" md-indeterminate class="md-warn"></md-spinner>
+        <md-button v-show="!loading" :disabled="fs.$invalid || stage.awaitingVerification" type="submit">Invia</md-button>
+        <md-spinner v-show="!fs || loading" md-indeterminate class="md-warn"></md-spinner>
     </vue-form>
-    <md-button :disabled="!stage.awaitingVerification" @click="next">Prosegui</md-button>
+    <md-button v-show="!loading" :disabled="!stage.awaitingVerification" @click="next">Prosegui</md-button>
 
     <md-snackbar md-position="bottom right" ref="snackbar">
         <span>{{message}}</span>
@@ -68,14 +68,17 @@ export default {
                 this.$refs.snackbar.open();
             })
             .catch((err) => {
+                console.log(err);
                 this.loading = false;
                 this.message = "E' avvenuto un errore durante l'invio dei dati";
                 this.$refs.snackbar.open();
             });
         },
         next() {
+            this.loading = true;
             return User.load()
             .then((user) => {
+                this.loading = false;
                 this.user = user;
                 if (user.getStage(3).isDone) {
                     return router.push('/stage/4');
@@ -84,6 +87,12 @@ export default {
                     this.$refs.snackbar.open();
                 }
             })
+            .catch((err) => {
+                console.log(err);
+                this.loading = false;
+                this.message = "E' avvenuto un errore durante l'invio dei dati";
+                this.$refs.snackbar.open();
+            });
         }
     }
 }
