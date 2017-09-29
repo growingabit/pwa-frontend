@@ -93,7 +93,7 @@ export default {
                 if (this.stage.isDone) {
                     return router.push('/');
                 } else {
-                    this.message = "Il tuo numero di telefono non è stato confermato.";
+                    this.message = "Il numero di telefono di un genitore non è stato confermato.";
                     this.$refs.snackbar.open();
                 }
             })
