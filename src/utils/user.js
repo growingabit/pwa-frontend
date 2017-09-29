@@ -84,7 +84,7 @@ class User {
             throw new Error('Invalid data');
         }
 
-        this.id = data.id;
+        this.signupDone = data.signupDone;
         this.stages = [];
         ['mandatorySignupStages', 'signupStages']
         .forEach((key) => {
@@ -94,7 +94,7 @@ class User {
 
                 stage.mandatory = key === 'mandatorySignupStages';
                 stage.stage = Number(index) + 1; // Set stage number for view
-                stage.path = `/stage/${stage.stage}`;                
+                stage.path = `/stage/${stage.stage}`;
                 stage.awaitingVerification = !stage.isDone && !!stage.data;
                 stage.name = stagesNames[index];
 

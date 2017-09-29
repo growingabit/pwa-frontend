@@ -2,7 +2,7 @@
 <div class="home">
     <h1 v-if="!awaitingAuthentication" class="md-headline">Home</h1>
     <md-button v-show="!authenticated && !awaitingAuthentication" @click="signup()" class="md-raised md-primary" id="signup">Entra</md-button>
-    <md-button v-show="authenticated && !awaitingAuthentication" @click="resumeSignup()" class="md-raised md-primary" id="logout">Riprendi la Registrazione</md-button>
+    <md-button v-show="authenticated && !awaitingAuthentication && !user.signupDone" @click="resumeSignup()" class="md-raised md-primary" id="logout">Riprendi la Registrazione</md-button>
     <md-spinner v-show="awaitingAuthentication" md-indeterminate class="md-warn"></md-spinner>
 
     <md-snackbar md-position="bottom right" ref="snackbar">
