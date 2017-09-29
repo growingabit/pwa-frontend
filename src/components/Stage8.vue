@@ -1,20 +1,12 @@
 <template>
 <div class="stage">
-    <h1 class="md-headline">Numero di telefono</h1>
+    <h1 class="md-headline">Numero di telefono di un genitore</h1>
     <vue-form :state="fs" @submit.prevent="onSubmit">
         <validate>
+            <label>Numero di telefono</label>
             <md-input-container md-clearable v-bind:class="{ 'md-input-invalid': !validity.phoneNumber }">
-                <label>Numero di telefono</label>
                 <md-input :disabled="stage.awaitingVerification || stage.isDone" name="phoneNumber" v-model="stage.data.phoneNumber" required></md-input>
                 <span class="md-error">Numero di telefono non valido</span>
-            </md-input-container>
-        </validate>
-
-        <validate v-if="stage.awaitingVerification">
-            <label>Codice di verifica</label>
-            <md-input-container md-clearable v-bind:class="{ 'md-input-invalid': !validity.verificationCode }">
-                <md-input name="verificationCode" v-model="verificationCode" required></md-input>
-                <span class="md-error">Codice di verifica non valido</span>
             </md-input-container>
         </validate>
 
@@ -38,11 +30,11 @@ import router from '@/router'
 import config from '@/utils/config'
 
 export default {
-    name: "Stage4",
+    name: "Stage8",
     beforeMount() {
         this.authenticated = auth.isAuthenticated();
         this.user = User.get();
-        this.stage = this.user.getStage(4);
+        this.stage = this.user.getStage(8);
     },
     computed: {
         // a computed getter
@@ -55,7 +47,7 @@ export default {
 
             return {
                 verificationCode: this.fs.verificationCode && (this.fs.verificationCode.$valid || this.fs.verificationCode.$pristine),
-                phoneNumber: this.user.isStageFieldValid(4, 'phoneNumber') || this.fs.phoneNumber.$pristine
+                phoneNumber: this.user.isStageFieldValid(8, 'phoneNumber') || this.fs.phoneNumber.$pristine
             }
         }
     },
@@ -73,10 +65,10 @@ export default {
     methods: {
         onSubmit() {
             this.loading = true;
-            return User.submitStageData(4, this.stage.data)
+            return User.submitStageData(8, this.stage.data)
             .then(() => {
                 this.user = User.get();
-                this.stage = this.user.getStage(4);
+                this.stage = this.user.getStage(8);
                 this.loading = false;
                 this.message = "A breve riceverai un sms di conferma!";
                 this.$refs.snackbar.open();
@@ -97,9 +89,9 @@ export default {
             .then((user) => {
                 this.loading = false;
                 this.user = user;
-                this.stage = user.getStage(4);
+                this.stage = user.getStage(8);
                 if (this.stage.isDone) {
-                    return router.push('/stage/5');
+                    return router.push('/');
                 } else {
                     this.message = "Il tuo numero di telefono non è stato confermato.";
                     this.$refs.snackbar.open();

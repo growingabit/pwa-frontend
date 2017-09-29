@@ -1,6 +1,6 @@
 <template>
 <div class="stage">
-    <h1 class="md-headline">Email</h1>
+    <h1 class="md-headline">Indirizzo Wallet</h1>
     <vue-form :state="fs" @submit.prevent="onSubmit">
         <validate>
             <md-input-container md-clearable v-bind:class="{ 'md-input-invalid': !validity.email }">
@@ -27,23 +27,23 @@ import User from '@/utils/user'
 import router from '@/router'
 
 export default {
-    name: "Stage3",
+    name: "Stage5",
     beforeMount() {
         this.authenticated = auth.isAuthenticated();
         this.user = User.get();
-        this.stage = this.user.getStage(3);
+        this.stage = this.user.getStage(5);
     },
     computed: {
         // a computed getter
         validity: function () {
-            if (!this.fs.email) {
+            if (!this.fs.address) {
                 return {
-                    email: true
+                    address: true
                 }
             }
 
             return {
-                email: this.fs.email.$valid || this.fs.email.$pristine
+                address: this.user || this.fs.address.$pristine
             }
         }
     },
@@ -60,10 +60,10 @@ export default {
     methods: {
         onSubmit() {
             this.loading = true;
-            return User.submitStageData(3, this.stage.data)
+            return User.submitStageData(5, this.stage.data)
             .then(() => {
                 this.user = User.get();
-                this.stage = this.user.getStage(3);
+                this.stage = this.user.getStage(5);
                 this.loading = false;
                 this.message = "A breve riceverai una mail di conferma!";
                 this.$refs.snackbar.open();
@@ -81,8 +81,8 @@ export default {
             .then((user) => {
                 this.loading = false;
                 this.user = user;
-                if (user.getStage(3).isDone) {
-                    return router.push('/stage/4');
+                if (user.getStage(5).isDone) {
+                    return router.push('/stage/6');
                 } else {
                     this.message = "Il tuo indirizzo email non è stato confermato.";
                     this.$refs.snackbar.open();

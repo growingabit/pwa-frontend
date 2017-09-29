@@ -4,6 +4,8 @@ import Stage1 from '@/components/Stage1'
 import Stage2 from '@/components/Stage2'
 import Stage3 from '@/components/Stage3'
 import Stage4 from '@/components/Stage4'
+import Stage5 from '@/components/Stage5'
+import Stage6 from '@/components/Stage6'
 import auth from '@/utils/auth'
 import User from '@/utils/user'
 import config from '@/utils/config'
@@ -28,7 +30,6 @@ const router = new Router({
         component: Stage2,
         beforeEnter: function(to, from, next) {
             return beforeStage(2, next);
-
         }
     },
     {
@@ -47,21 +48,22 @@ const router = new Router({
             return beforeStage(4, next);
         }
     },
-    // {
-    //     path: '/stage/5',
-    //     name: 'Stage5',
-    //     component: Stage5,
-    //     beforeEnter: function(to, from, next) {
-    //         return beforeStage(5, next);
-    //     }
-    // }, {
-    //     path: '/stage/6',
-    //     name: 'Stage6',
-    //     component: Stage6,
-    //     beforeEnter: function(to, from, next) {
-    //         return beforeStage(6, next);
-    //     }
-    // },
+    {
+        path: '/stage/5',
+        name: 'Stage5',
+        component: Stage5,
+        beforeEnter: function(to, from, next) {
+            return beforeStage(5, next);
+        }
+    },
+    {
+        path: '/stage/6',
+        name: 'Stage6',
+        component: Stage6,
+        beforeEnter: function(to, from, next) {
+            return beforeStage(6, next);
+        }
+    },
     {
         path: '/verify/email/:codeBase64',
         component: {
@@ -75,30 +77,6 @@ const router = new Router({
                 auth.isReady()
                 .then(() => {
                     return this.$http.get(`${config.apiUrl}/api/v1/verify/email/${code}`);
-                })
-                .then((res) => {
-                    console.log(res);
-                    this.$router.push('/');
-                })
-                .catch((err) => {
-                    console.log(err);
-                    this.$router.push('/');
-                });
-            }
-        }
-    }, {
-        path: '/verify/phone/:code',
-        component: {
-            template: '<span></span>',
-            mounted: function() {
-                const code = this.$route.params.code;
-                if (!code || !auth.hasSessionSet()) {
-                    return this.$router.push('/');
-                }
-
-                auth.isReady()
-                .then(() => {
-                    return this.$http.get(`${config.apiUrl}/api/v1/verify/phone/${code}`);
                 })
                 .then((res) => {
                     console.log(res);
