@@ -70,6 +70,6 @@ export default [
     { email: new EmailModel },
     { phoneNumber: new PhoneNumberModel() },
     { address: new WalletAddressModel() },
-    { otp: new StringModel() }, // blockcerts no data required
+    { nonce: new StringModel() }, // blockcerts no data required
     { phoneNumber: new PhoneNumberModel() }
 ];

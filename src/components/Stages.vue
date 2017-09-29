@@ -62,7 +62,7 @@
                     <span v-if="stages[5].awaitingVerification" class="verification-error">(Waiting verification) - </span> Blockcerts Otp
                 </label>
                 <md-input readonly v-model="stages[5].data.otp"></md-input>
-                <span v-if="stages[5].awaitingVerification" class="md-error">Verify your blockerts otp</span>
+                <span v-if="stages[5].awaitingVerification" class="md-error">Verify your blockcerts otp</span>
             </md-input-container>
             <md-button v-clipboard="stages[5].data.otp" @success="copySuccess" @error="copyError">Copy</md-button>
         </md-step>

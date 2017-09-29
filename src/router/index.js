@@ -6,6 +6,8 @@ import Stage3 from '@/components/Stage3'
 import Stage4 from '@/components/Stage4'
 import Stage5 from '@/components/Stage5'
 import Stage6 from '@/components/Stage6'
+import Stage7 from '@/components/Stage7'
+
 import auth from '@/utils/auth'
 import User from '@/utils/user'
 import config from '@/utils/config'
@@ -62,6 +64,14 @@ const router = new Router({
         component: Stage6,
         beforeEnter: function(to, from, next) {
             return beforeStage(6, next);
+        }
+    },
+    {
+        path: '/stage/7',
+        name: 'Stage7',
+        component: Stage7,
+        beforeEnter: function(to, from, next) {
+            return beforeStage(7, next);
         }
     },
     {

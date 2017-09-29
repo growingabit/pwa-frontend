@@ -1,17 +1,16 @@
 <template>
 <div class="stage">
-    <h1 class="md-headline">Indirizzo Wallet</h1>
-    <vue-form :state="fs" @submit.prevent="onSubmit">
-        <validate tag="label">
-            <md-input-container md-clearable v-bind:class="{ 'md-input-invalid': (!user.isStageValid(6) || fs.$invalid) && fs.$dirty }">
-                <label>Indirizzo Wallet</label>
-                <md-input :disabled="stage.isDone" v-model="stage.data.invitationCode" name="invitationCode" required></md-input>
-                <span class="md-error">Indirizzo non valido</span>
-            </md-input-container>
-        </validate>
-        <md-button v-if="!loading" :disabled="!user.isStageValid(6) || fs.$invalid || stage.isDone" type="submit">Invia</md-button>
-        <md-spinner v-if="loading" md-indeterminate class="md-warn"></md-spinner>
-    </vue-form>
+    <h1 class="md-headline">Blockcerts</h1>
+    <md-input-container>
+        <label>Issuer</label>
+        <md-input disabled type="text" v-model="issuer"></md-input>
+    </md-input-container>
+    <md-input-container v-show="!loading">
+        <label>Nonce</label>
+        <md-input disabled type="text" v-model="stage.data.nonce"></md-input>
+    </md-input-container>
+    <md-spinner v-show="loading" md-indeterminate class="md-warn"></md-spinner>
+    <md-button v-show="!loading" @click="next">Prosegui</md-button>
 
     <md-snackbar md-position="bottom right" ref="snackbar">
         <span>{{message}}</span>
@@ -33,27 +32,53 @@ export default {
         this.user = User.get();
         this.stage = this.user.getStage(6);
     },
+    mounted() {
+        if (this.stage.data.nonce) {
+            return;
+        }
+
+        this.loading = true;
+        User.retrieveStageData(6)
+        .then(() => {
+            this.user = User.get();
+            this.stage = this.user.getStage(6);
+            this.loading = false;
+        })
+        .catch((err) => {
+            console.log(err);
+            this.loading = false;
+            this.message = "E' avvenuto un errore durante l'invio dei dati";
+            this.$refs.snackbar.open();
+        });
+    },
     data() {
         return {
             authenticated: false,
-            fs: {},
             stage: {},
             loading: false,
-            message: ''
+            message: '',
+            issuer: 'https://issuer.growbit.xyz/'
         }
     },
     methods: {
-        onSubmit() {
+        next() {
             this.loading = true;
-            return User.submitStageData(6, this.stage.data)
-            .then(() => {
+            return User.load()
+            .then((user) => {
                 this.loading = false;
-                return router.push('/stage/7');
+                this.user = user;
+                if (user.getStage(6).isDone) {
+                    return router.push('/stage/7');
+                } else {
+                    this.message = "Non ci risulta che hai completato il passaggio su blockcerts. Chiedi aiuto se ti serve.";
+                    this.$refs.snackbar.open();
+                }
             })
             .catch((err) => {
+                console.log(err);
                 this.loading = false;
                 this.message = "E' avvenuto un errore durante l'invio dei dati";
-                this.$refs.snackbar.open()
+                this.$refs.snackbar.open();
             });
         }
     }

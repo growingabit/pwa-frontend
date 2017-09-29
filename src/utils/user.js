@@ -17,7 +17,7 @@ const stagesEndpointsMap = [
     new Req('api/v1/me/studentemail'),
     new Req('api/v1/me/studentphone'),
     new Req('api/v1/me/walletsetup'),
-    new Req('api/v1/me/blockcertsotp', 'get'),
+    new Req('api/v1/me/blockcerts', 'get'),
     new Req('api/v1/me/parentphone')
 ];
 

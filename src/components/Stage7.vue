@@ -1,17 +1,19 @@
 <template>
 <div class="stage">
-    <h1 class="md-headline">Blockcerts</h1>
-    <md-input-container>
-        <label>Issuer</label>
-        <md-input disabled type="text" v-model="issuer"></md-input>
-    </md-input-container>
-    <md-input-container v-show="!loading">
-        <label>Otp</label>
-        <md-input disabled type="text" v-model="stage.data.otp"></md-input>
-    </md-input-container>
+    <h1 class="md-headline">Numero di telefono di un genitore</h1>
+    <vue-form :state="fs" @submit.prevent="onSubmit">
+        <validate>
+            <label>Numero di telefono</label>
+            <md-input-container md-clearable v-bind:class="{ 'md-input-invalid': !validity.phoneNumber }">
+                <md-input :disabled="stage.awaitingVerification || stage.isDone" name="phoneNumber" v-model="stage.data.phoneNumber" required></md-input>
+                <span class="md-error">Numero di telefono non valido</span>
+            </md-input-container>
+        </validate>
 
-    <md-spinner v-show="loading" md-indeterminate class="md-warn"></md-spinner>
-    <md-button v-show="!loading" @click="next">Prosegui</md-button>
+        <md-button v-if="!loading" :disabled="fs.$invalid || stage.awaitingVerification" type="submit">Invia</md-button>
+        <md-spinner v-if="!fs || loading" md-indeterminate class="md-warn"></md-spinner>
+    </vue-form>
+    <md-button :disabled="!stage.awaitingVerification || (fs.verificationCode && fs.verificationCode.$invalid)" @click="next">Prosegui</md-button>
 
     <md-snackbar md-position="bottom right" ref="snackbar">
         <span>{{message}}</span>
@@ -25,6 +27,7 @@
 import auth from '@/utils/auth'
 import User from '@/utils/user'
 import router from '@/router'
+import config from '@/utils/config'
 
 export default {
     name: "Stage7",
@@ -33,45 +36,61 @@ export default {
         this.user = User.get();
         this.stage = this.user.getStage(7);
     },
-    mounted() {
-        if (this.stage.data.otp) {
-            return;
-        }
+    computed: {
+        // a computed getter
+        validity: function () {
+            if (!this.fs.phoneNumber) {
+                return {
+                    phoneNumber: true
+                }
+            }
 
-        this.loading = true;
-        User.retrieveStageData(7)
-        .then(() => {
-            this.user = User.get();
-            this.stage = this.user.getStage(7);
-            this.loading = false;
-        })
-        .catch((err) => {
-            console.log(err);
-            this.loading = false;
-            this.message = "E' avvenuto un errore durante l'invio dei dati";
-            this.$refs.snackbar.open();
-        });
+            return {
+                verificationCode: this.fs.verificationCode && (this.fs.verificationCode.$valid || this.fs.verificationCode.$pristine),
+                phoneNumber: this.user.isStageFieldValid(7, 'phoneNumber') || this.fs.phoneNumber.$pristine
+            }
+        }
     },
+
     data() {
         return {
             authenticated: false,
+            fs: {},
             stage: {},
             loading: false,
             message: '',
-            issuer: 'https://issuer.growbit.xyz/'
+            verificationCode: ''
         }
     },
     methods: {
+        onSubmit() {
+            this.loading = true;
+            return User.submitStageData(7, this.stage.data)
+            .then(() => {
+                this.user = User.get();
+                this.stage = this.user.getStage(7);
+                this.loading = false;
+                this.message = "A breve riceverai un sms di conferma!";
+                this.$refs.snackbar.open();
+            })
+            .catch((err) => {
+                this.loading = false;
+                this.message = "E' avvenuto un errore durante l'invio dei dati";
+                this.$refs.snackbar.open();
+            });
+        },
         next() {
             this.loading = true;
+
             return User.load()
             .then((user) => {
                 this.loading = false;
                 this.user = user;
-                if (user.getStage(7).isDone) {
-                    return router.push('/stage/8');
+                this.stage = user.getStage(7);
+                if (this.stage.isDone) {
+                    return router.push('/');
                 } else {
-                    this.message = "Non ci risulta che hai completato il passaggio su blockcerts. Chiedi aiuto se ti serve.";
+                    this.message = "Il numero di telefono di un genitore non è stato confermato.";
                     this.$refs.snackbar.open();
                 }
             })
