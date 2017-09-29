@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 
 gsutil -m rm -R gs://abc-growbit-xyz-backend/
 
