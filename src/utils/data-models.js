@@ -32,10 +32,9 @@ class WalletAddressModel extends StringModel {
 
 class PhoneNumberModel extends StringModel {
     validate(val) {
-        return val &&
-            val[0] === '+' &&
+        return val &&            
             !isNaN(Number(val.substr(1))) &&
-            val.length === 13;
+            (val.length === 10 || val.length === 9);
     }
 
     transformInput(val) {
@@ -43,8 +42,7 @@ class PhoneNumberModel extends StringModel {
     }
 
     transformOutput(val) {
-        // return `+39${val}`;
-        return val;
+        return `+39${val}`;        
     }
 }
 
