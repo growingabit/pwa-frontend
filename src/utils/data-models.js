@@ -32,7 +32,7 @@ class WalletAddressModel extends StringModel {
 
 class PhoneNumberModel extends StringModel {
     validate(val) {
-        return val &&            
+        return val &&
             !isNaN(Number(val.substr(1))) &&
             (val.length === 10 || val.length === 9);
     }
@@ -42,7 +42,7 @@ class PhoneNumberModel extends StringModel {
     }
 
     transformOutput(val) {
-        return `+39${val}`;        
+        return `+39${val}`;
     }
 }
 
@@ -69,6 +69,9 @@ export default [
     { phoneNumber: new PhoneNumberModel() },
     { address: new WalletAddressModel() },
     { nonce: new StringModel() }, // blockcerts no data required
-    { name: new StringModel() },
-    { surname: new StringModel() }
+    {
+        phoneNumber: new PhoneNumberModel(),
+        name: new StringModel(),
+        surname: new StringModel()
+    }
 ];
