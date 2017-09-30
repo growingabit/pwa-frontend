@@ -1,14 +1,20 @@
 <template>
 <div class="stage">
-    <h1 class="md-headline">Numero di telefono di un genitore</h1>
+    <h1 class="md-headline">Dati Genitore</h1>
     <vue-form :state="fs" @submit.prevent="onSubmit">
         <validate>
-            <label>Numero di telefono</label>
-            <md-input-container md-clearable v-bind:class="{ 'md-input-invalid': !user.isStageValid(7) }">
+            <md-input-container md-clearable v-bind:class="{ 'md-input-invalid': !validity.phoneNumber }">
+                <label>Numero di telefono</label>
                 <md-input :disabled="stage.awaitingVerification || stage.isDone" name="phoneNumber" v-model="stage.data.phoneNumber" required></md-input>
-                <md-input :disabled="stage.awaitingVerification || stage.isDone" name="name" v-model="stage.data.name" required></md-input>
-                <md-input :disabled="stage.awaitingVerification || stage.isDone" name="surname" v-model="stage.data.surname" required></md-input>
                 <span class="md-error">Numero di telefono non valido</span>
+            </md-input-container>
+            <md-input-container md-clearable v-bind:class="{ 'md-input-invalid': !validity.name }">
+                <label>Nome</label>
+                <md-input :disabled="stage.awaitingVerification || stage.isDone" name="name" v-model="stage.data.name" required></md-input>
+            </md-input-container>
+            <md-input-container md-clearable v-bind:class="{ 'md-input-invalid': !validity.surname }">
+                <label>Cognome</label>
+                <md-input :disabled="stage.awaitingVerification || stage.isDone" name="surname" v-model="stage.data.surname" required></md-input>
             </md-input-container>
         </validate>
 
