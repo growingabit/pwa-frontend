@@ -9,6 +9,7 @@
         <label>Nonce</label>
         <md-input disabled type="text" v-model="stage.data.nonce"></md-input>
     </md-input-container>
+    <md-button v-clipboard="stage.data.nonce" @success="copySuccess" @error="copyError">Copia</md-button>
     <md-spinner v-show="loading" md-indeterminate class="md-warn"></md-spinner>
     <md-button v-show="!loading" @click="next">Prosegui</md-button>
 
@@ -61,6 +62,14 @@ export default {
         }
     },
     methods: {
+        copySuccess() {
+            this.message = 'Nonce copiato!'
+            this.$refs.snackbar.open();
+        },
+        copyError() {
+            this.message = 'Non è stato possibile copiare il Nonce.'
+            this.$refs.snackbar.open();
+        },
         next() {
             this.loading = true;
             return User.load()
