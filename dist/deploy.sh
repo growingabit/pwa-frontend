@@ -7,7 +7,7 @@ gsutil -m cp -R . gs://abc-growbit-xyz-backend/
 
 gsutil rm gs://abc-growbit-xyz-backend/deploy.sh
 
-gsutil acl ch -r -u AllUsers:R gs://abc-growbit-xyz-backend
+gsutil -m acl ch -r -u AllUsers:R gs://abc-growbit-xyz-backend
 
 gsutil web set -m index.html -e index.html gs://abc-growbit-xyz-backend
 
