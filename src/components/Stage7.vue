@@ -27,6 +27,13 @@
         <span>{{message}}</span>
         <md-button class="md-accent" @click="$refs.snackbar.close()">Chiudi</md-button>
     </md-snackbar>
+
+    <md-dialog-alert
+    :md-content="congratulations"
+    :md-ok-text="okText"
+    @close="onDialogClosed"
+    ref="congratsDialog">
+    </md-dialog-alert>
 </div>
 </template>
 
@@ -70,10 +77,15 @@ export default {
             stage: {},
             loading: false,
             message: '',
-            verificationCode: ''
+            verificationCode: '',
+            congratulations: `Congratulazioni, hai completato una delle registrazioni piu' lunghe della tua vita! Riceverai un email/sms quando potrai svolgere l'autocertificazione.`,
+            okText: 'Ok!'
         }
     },
     methods: {
+        onDialogClosed() {
+            return router.push('/');
+        },
         onSubmit() {
             this.loading = true;
             return User.submitStageData(7, this.stage.data)
@@ -99,7 +111,7 @@ export default {
                 this.user = user;
                 this.stage = user.getStage(7);
                 if (this.stage.isDone) {
-                    return router.push('/');
+                    this.$refs.congratsDialog.open();
                 } else {
                     this.message = "Il numero di telefono di un genitore non è stato confermato.";
                     this.$refs.snackbar.open();
