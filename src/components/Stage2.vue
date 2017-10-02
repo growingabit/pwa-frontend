@@ -21,7 +21,7 @@
                 <span class="md-error">Data non valida. Usa il formato gg/mm/aaaa.</span>
             </md-input-container>
         </validate>
-        <md-button v-if="!fs || !loading" :disabled="fs.$invalid" type="submit">Invia</md-button>
+        <md-button v-if="!fs || !loading" :disabled="fs.$invalid || stage.isDone" type="submit">Invia</md-button>
         <md-spinner v-if="!fs || loading" md-indeterminate class="md-warn"></md-spinner>
     </vue-form>
 
