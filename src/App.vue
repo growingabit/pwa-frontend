@@ -24,7 +24,7 @@
                     <span>Stage Registrazione</span>
                     <md-list-expand>
                         <md-list>
-                            <md-list-item v-for="stage in stages" :key="stage.name" class="md-inset" :disabled="stage.disabled" @click="gotoPath(stage.path)">
+                            <md-list-item v-for="stage in stages" :key="stage.name" :disabled="stage.disabled" @click="gotoPath(stage.path)">
                                 <a class="md-list-item-container md-button router-link-exact-active router-link-active">{{stage.name}}</a>
                                 <md-button class="md-icon-button md-list-action" @click="gotoPath(stage.path)">
                                     <md-icon v-show="stage.isDone" class="md-primary">done</md-icon>
