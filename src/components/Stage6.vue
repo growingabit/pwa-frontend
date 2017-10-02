@@ -4,12 +4,13 @@
     <md-input-container>
         <label>Issuer</label>
         <md-input disabled type="text" v-model="issuer"></md-input>
+        <md-button v-clipboard="issuer" @success="copySuccess" @error="copyError">Copia</md-button>
     </md-input-container>
-    <md-input-container v-show="!loading">
+    <md-input-container>
         <label>Nonce</label>
         <md-input disabled type="text" v-model="stage.data.nonce"></md-input>
+        <md-button v-clipboard="stage.data.nonce" @success="copySuccess" @error="copyError">Copia</md-button>
     </md-input-container>
-    <md-button v-clipboard="stage.data.nonce" @success="copySuccess" @error="copyError">Copia</md-button>
     <md-spinner v-show="loading" md-indeterminate class="md-warn"></md-spinner>
     <md-button v-show="!loading" @click="next">Prosegui</md-button>
 
@@ -63,11 +64,11 @@ export default {
     },
     methods: {
         copySuccess() {
-            this.message = 'Nonce copiato!'
+            this.message = 'Copiato!'
             this.$refs.snackbar.open();
         },
         copyError() {
-            this.message = 'Non è stato possibile copiare il Nonce.'
+            this.message = 'Non è stato possibile copiare.'
             this.$refs.snackbar.open();
         },
         next() {
