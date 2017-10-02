@@ -18,7 +18,7 @@
             </md-input-container>
         </validate>
 
-        <md-button v-if="!loading" :disabled="fs.$invalid || stage.awaitingVerification" type="submit">Invia</md-button>
+        <md-button v-if="!loading" :disabled="fs.$invalid || stage.awaitingVerification || stage.isDone" type="submit">Invia</md-button>
         <md-spinner v-if="!fs || loading" md-indeterminate class="md-warn"></md-spinner>
     </vue-form>
     <md-button :disabled="!stage.awaitingVerification || (fs.verificationCode && fs.verificationCode.$invalid)" @click="next">Prosegui</md-button>
