@@ -24,8 +24,12 @@
                     <span>Stage Registrazione</span>
                     <md-list-expand>
                         <md-list>
-                            <md-list-item v-for="stage in stages" :key="stage.name" v-bind:class="{ done: stage.isDone, verify: stage.awaitingVerification  }" class="md-inset" :disabled="stage.disabled">                                
-                                <router-link exact :to="stage.path">{{stage.name}}</router-link>
+                            <md-list-item v-for="stage in stages" :key="stage.name" class="md-inset" :disabled="stage.disabled" @click="gotoPath(stage.path)">
+                                <a class="md-list-item-container md-button router-link-exact-active router-link-active">{{stage.name}}</a>
+                                <md-button class="md-icon-button md-list-action" @click="gotoPath(stage.path)">
+                                    <md-icon v-show="stage.isDone" class="md-primary">done</md-icon>
+                                    <md-icon v-show="stage.awaitingVerification" class="md-primary">warning</md-icon>
+                                </md-button>
                             </md-list-item>
                         </md-list>
                     </md-list-expand>
@@ -77,6 +81,10 @@ export default {
         },
         toggleLeftSidenav() {
             this.$refs.leftSidenav.toggle();
+        },
+        gotoPath(path) {
+            this.toggleLeftSidenav();
+            router.push(path);
         }
     }
 }
@@ -133,14 +141,6 @@ export default {
 .main-sidebar-links .md-list-item-container {
     font-size: 14px;
     font-weight: 500;
-}
-
-.done {
-    color: #00C853;
-}
-
-.verify {
-    color: #ff4911
 }
 
 </style>

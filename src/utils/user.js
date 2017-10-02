@@ -28,7 +28,7 @@ const stagesNames = [
     'Numero di Telefono',
     'Indirizzo Wallet',
     'Otp Blockcerts',
-    'Numero di Telefono Genitore'
+    'Dati Genitore'
 ];
 
 let user;
