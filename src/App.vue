@@ -10,7 +10,7 @@
     <md-sidenav class="main-sidebar md-left" ref="leftSidenav">
         <md-toolbar class="growbit-logo">
             <router-link exact to="/">
-                <img src="/static/growbitlogo.png" alt="Growbit">
+                <img src="/static/growbitlogo.png" v-on:click="toggleLeftSidenav" alt="Growbit">
             </router-link>
         </md-toolbar>
 
