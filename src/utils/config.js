@@ -14,6 +14,14 @@ const config = {
             domain: 'growbit-development.eu.auth0.com',
             redirectUrl: 'http://localhost:8081/oauth2/callback'
         }
+    },
+    testing: {
+        apiUrl: 'http://localhost:8080',
+        auth0: {
+            clientID: '32wl1L4tlptjPImhEvLIbrQSkwmAJx5s',
+            domain: 'growbit-development.eu.auth0.com',
+            redirectUrl: 'http://localhost:8081/oauth2/callback'
+        }
     }
 };
 

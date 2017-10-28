@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import dataModels from '@/utils/data-models'
 import config from '@/utils/config'
-
 const apiUrl = config.apiUrl;
 
 class Req {
@@ -144,8 +143,8 @@ class User {
 
     isAllowed(stageIndex) {
         stageIndex -= 1;
-        const stages = this.getStages();
-        return stages[stageIndex] && !stages[stageIndex].disabled;
+        const stages = this.getStages();        
+        return !!(stages[stageIndex] && !stages[stageIndex].disabled);
     }
 
 

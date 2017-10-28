@@ -103,15 +103,15 @@ describe('user.js', () => {
             const data = getUserData();
 
             let user = new User(data);
-            expect(user.isAllowed(0))
-            .to.equal(true);
             expect(user.isAllowed(1))
-            .to.equal(false);
+            .to.equal(true);
             expect(user.isAllowed(2))
             .to.equal(false);
             expect(user.isAllowed(3))
             .to.equal(false);
             expect(user.isAllowed(4))
+            .to.equal(false);
+            expect(user.isAllowed(5))
             .to.equal(false);
         });
 
@@ -120,8 +120,6 @@ describe('user.js', () => {
             data.mandatorySignupStages['0'].isDone = true;
             let user = new User(data);
 
-            expect(user.isAllowed(0))
-            .to.equal(true);
             expect(user.isAllowed(1))
             .to.equal(true);
             expect(user.isAllowed(2))
@@ -129,6 +127,8 @@ describe('user.js', () => {
             expect(user.isAllowed(3))
             .to.equal(true);
             expect(user.isAllowed(4))
+            .to.equal(true);
+            expect(user.isAllowed(5))
             .to.equal(false);
         });
     });
