@@ -80,7 +80,7 @@ export default {
                 if (user.getStage(6).isDone) {
                     return router.push('/stage/7');
                 } else {
-                    this.message = "Non ci risulta che hai completato il passaggio su blockcerts. Chiedi aiuto se ti serve.";
+                    this.message = "Non ci risulta che tu abbia completato il passaggio su blockcerts. Chiedi aiuto se ti serve.";
                     this.$refs.snackbar.open();
                 }
             })

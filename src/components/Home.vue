@@ -3,7 +3,7 @@
     <h1 v-if="!awaitingAuthentication" class="md-headline">Home</h1>
     <md-button v-show="!authenticated && !awaitingAuthentication" @click="signup()" class="md-raised md-primary" id="signup">Entra</md-button>
     <md-button v-show="authenticated && !awaitingAuthentication && (!user || !user.signupDone)" @click="resumeSignup()" class="md-raised md-primary" id="logout">Riprendi la Registrazione</md-button>
-    <h2 v-show="user && user.signupDone">Registrazione Completata</h2>    
+    <h2 v-show="authenticated && !awaitingAuthentication && user && user.signupDone">Registrazione Completata</h2>
     <md-spinner v-show="awaitingAuthentication" md-indeterminate class="md-warn"></md-spinner>
 
     <md-snackbar md-position="bottom right" ref="snackbar">
@@ -52,7 +52,7 @@ export default {
             .then(() => {
                 this.authenticated = auth.isAuthenticated();
                 this.user = User.get();
-            })
+            });
         },
         signup() {
             auth.logout();
